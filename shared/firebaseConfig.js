@@ -3,14 +3,14 @@ import { getDatabase, onValue, push, ref } from "firebase/database";
 import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCptHyVUlKcUeG_z2fW-lcuCiL8uhRosiQ",
-    authDomain: "cis-657-daeac.firebaseapp.com",
-    projectId: "cis-657-daeac",
-    storageBucket: "cis-657-daeac.appspot.com",
-    messagingSenderId: "626456826352",
-    appId: "1:626456826352:web:9c65460b0304fb3f7a4d35",
-    measurementId: "G-5JTDGMMGH8"
-  };
+  apiKey: "AIzaSyCmis1kdFSad9hU23Pj8d64S281_BR627E",
+  authDomain: "gvsu-marketplace.firebaseapp.com",
+  projectId: "gvsu-marketplace",
+  storageBucket: "gvsu-marketplace.appspot.com",
+  messagingSenderId: "749426793103",
+  appId: "1:749426793103:web:dd66416ec4ce080faf2efa",
+  measurementId: "G-WPJTD1M192"
+};
 
 export const initApp = () => {
     initializeApp(firebaseConfig)
