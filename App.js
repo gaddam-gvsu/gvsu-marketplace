@@ -1,7 +1,6 @@
 import * as React from "react";
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { HomeScreen } from "./screens/HomeScreen";
+import Home from "./screens/Home";
 import Login from "./screens/Login";
 import { NavigationContainer } from "@react-navigation/native";
 import { SplashScreen } from "./screens/SplashScreen";
@@ -95,7 +94,7 @@ export default function App({ navigation }) {
             />
           ) : (
             // User is signed in
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Home" component={Home} />
           )}
         </Stack.Navigator>
       </NavigationContainer>
