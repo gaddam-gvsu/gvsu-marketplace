@@ -1,4 +1,4 @@
-import { getDatabase, onValue, push, ref } from "firebase/database";
+import { getDatabase, getDocs, onValue, push, ref } from "firebase/database";
 
 import { initializeApp } from 'firebase/app';
 
@@ -16,12 +16,21 @@ export const initApp = () => {
     initializeApp(firebaseConfig)
 }
 
-export const writeToHistory = (data) => {
+export const saveProduct = (data) => {
     const db = getDatabase();
-    push(ref(db, 'history/'), { ...data, timestamp: Date.now() });
+    push(ref(db, 'products/'), { ...data, timestamp: Date.now() });
 }
 
-export const setupListnerForHistory = (callback) => {
+export const getProducts = async () => {
+  const db = getDatabase();
+  const productsSnapshot = await getDocs(collection(db, "products"));
+  productsSnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, " => ", doc.data());
+  });
+}
+
+export const setupListnerForProducts = (callback) => {
     const db = getDatabase();
     const historyRef = ref(db, 'history/');
     onValue(historyRef, (snapshot) => {

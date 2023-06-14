@@ -1,71 +1,104 @@
-import * as Google from "expo-auth-session/providers/google";
-import * as WebBrowser from "expo-web-browser";
+import * as React from "react";
 
-import { Button, StyleSheet, Text, View } from "react-native";
-import { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { HomeScreen } from "./screens/HomeScreen";
+import Login from "./screens/Login";
+import { NavigationContainer } from "@react-navigation/native";
+import { SplashScreen } from "./screens/SplashScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-WebBrowser.maybeCompleteAuthSession();
+export const AuthContext = React.createContext();
 
-export default function App() {
-  const [token, setToken] = useState("");
-  const [userInfo, setUserInfo] = useState(null);
+const Stack = createNativeStackNavigator();
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: "749426793103-at37tgncj3o3phvd3biqa2kfuve7tklp.apps.googleusercontent.com",
-    iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-    webClientId: "749426793103-rvn4d39nqgifqs1jgmv1mpb7kaq8fvpq.apps.googleusercontent.com"
-
-  });
-
-  useEffect(() => {
-    if (response?.type === "success") {
-      setToken(response.authentication.accessToken);
-      getUserInfo();
+export default function App({ navigation }) {
+  const [state, dispatch] = React.useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case "RESTORE_TOKEN":
+          return {
+            ...prevState,
+            user: action.user,
+            isLoading: false,
+          };
+        case "SIGN_IN":
+          return {
+            ...prevState,
+            isSignout: false,
+            user: action.user,
+          };
+        case "SIGN_OUT":
+          return {
+            ...prevState,
+            isSignout: true,
+            user: null,
+          };
+      }
+    },
+    {
+      isLoading: true,
+      isSignout: false,
+      dp: true,
+      user: null,
     }
-  }, [response, token]);
+  );
 
-  const getUserInfo = async () => {
-    try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+  React.useEffect(() => {
+    // Fetch the token from storage then navigate to our appropriate place
+    const bootstrapAsync = async () => {
+      let userCache;
 
-      const user = await response.json();
-      setUserInfo(user);
-    } catch (error) {
-      // Add your own error handler here
-    }
-  };
+      try {
+        // Restore token stored in `SecureStore` or any other encrypted storage
+        userCache = await AsyncStorage.getItem("@user");
+        userCache = JSON.parse(userCache);
+      } catch (e) {
+        // Restoring token failed
+        console.log("userCache-error", e);
+      }
+
+      // After restoring token, we may need to validate it in production apps
+
+      // This will switch to the App screen or Auth screen and this loading
+      // screen will be unmounted and thrown away.
+      dispatch({ type: "RESTORE_TOKEN", user: userCache });
+    };
+
+    bootstrapAsync();
+  }, []);
+
+  const authContext = React.useMemo(() => ({
+    signIn: async (user) => {
+      dispatch({ type: "SIGN_IN", user });
+    },
+    signOut: () => dispatch({ type: "SIGN_OUT" }),
+    user: state.user,
+  }));
 
   return (
-    <View style={styles.container}>
-      {userInfo === null ? (
-        <Button
-          title="Sign in with Google"
-          disabled={!request}
-          onPress={() => {
-            promptAsync();
-          }}
-        />
-      ) : (
-        <Text style={styles.text}>{userInfo.name}</Text>
-      )}
-    </View>
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {state.isLoading ? (
+            // We haven't finished checking for the token yet
+            <Stack.Screen name="Splash" component={SplashScreen} />
+          ) : !state.user ? (
+            // No token found, user isn't signed in
+            <Stack.Screen
+              name="SignIn"
+              component={Login}
+              options={{
+                title: "Sign in",
+                // When logging out, a pop animation feels intuitive
+                animationTypeForReplace: state.isSignout ? "pop" : "push",
+              }}
+            />
+          ) : (
+            // User is signed in
+            <Stack.Screen name="Home" component={HomeScreen} />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-});
