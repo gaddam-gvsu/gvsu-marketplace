@@ -43,7 +43,7 @@ export const saveProduct = async (data) => {
   const db = getDatabase();
   const res = await push(dref(db, "products/"), {
     ...payload,
-    downloadUrl,
+    images: [downloadUrl],
     timestamp: Date.now(),
   });
   return res;
@@ -56,9 +56,8 @@ export const getProducts = async () => {
     if (snapshot.exists()) {
       const data = snapshot?.val();
       const refinedData = Object.keys(data)
-        .map((_id) => ({
-          _id,
-          ...data[_id],
+        .map((id) => ({
+          id, ...data[id],
         }))
         .sort((v1, v2) => v2.timestamp - v1.timestamp);
       console.log("values", refinedData);

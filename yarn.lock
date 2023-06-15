@@ -4718,11 +4718,6 @@ expo-auth-session@~4.0.3:
     invariant "^2.2.4"
     qs "^6.11.0"
 
-expo-blur@^12.3.0:
-  version "12.3.0"
-  resolved "https://registry.yarnpkg.com/expo-blur/-/expo-blur-12.3.0.tgz#883907bd2bb2ac3aed15be701d3c8f98570d51d7"
-  integrity sha512-MwnLi57f7xpjwj/mG8CW40MJ6u81WW7HDEorIzYcvABO4+J+guO6P6e8uiWiYUdwomOzJzj25iMLiml6vJdISA==
-
 expo-camera@^13.2.1:
   version "13.2.1"
   resolved "https://registry.yarnpkg.com/expo-camera/-/expo-camera-13.2.1.tgz#bfd1e2248d10a5da43d43a4cc77e378e5acf25bb"

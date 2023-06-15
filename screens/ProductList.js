@@ -1,173 +1,27 @@
-import React from "react";
-import LottieView from "lottie-react-native";
-import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableWithoutFeedback } from "react-native";
-import { Image } from "react-native-elements";
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+
 import Constants from "expo-constants";
+import { Image } from "react-native-elements";
+import LottieView from "lottie-react-native";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
+import { getProducts } from "../shared/firebaseApi";
 
 const ProductList = ({ navigation }) => {
   const loading = false;
-  //   const {
-  //     data: listings,
-  //     error,
-  //     loading,
-  //     request: loadListings,
-  //   } = useApi(listingApi.getListings);
+  const [listings, setListings] = useState([]);
 
-  const listings = [
-    {
-      id: 201,
-      title: "Red jacket",
-      images: [
-        {
-          url: "http://localhost:9000/assets/jacket1_full.jpg",
-          thumbnailUrl: "http://localhost:9000/assets/jacket1_thumb.jpg",
-        },
-      ],
-      price: 100,
-      categoryId: 5,
-      userId: 1,
-      location: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-      },
-    },
-    {
-      id: 3,
-      title: "Gray couch in a great condition",
-      images: [
-        {
-          url: "http://localhost:9000/assets/couch2_full.jpg",
-          thumbnailUrl: "http://localhost:9000/assets/couch2_thumb.jpg",
-        },
-      ],
-      categoryId: 1,
-      price: 1200,
-      userId: 2,
-      location: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-      },
-    },
-    {
-      id: 1,
-      title: "Room & Board couch (great condition) - delivery included",
-      description:
-        "I'm selling my furniture at a discount price. Pick up at Venice. DM me asap.",
-      images: [
-        {
-          url: "http://localhost:9000/assets/couch1_full.jpg",
-          thumbnailUrl: "http://localhost:9000/assets/couch1_thumb.jpg",
-        },
-        {
-          url: "http://localhost:9000/assets/couch2_full.jpg",
-          thumbnailUrl: "http://localhost:9000/assets/couch2_thumb.jpg",
-        },
-        {
-          url: "http://localhost:9000/assets/couch3_full.jpg",
-          thumbnailUrl: "http://localhost:9000/assets/couch3_thumb.jpg",
-        },
-      ],
-      price: 1000,
-      categoryId: 1,
-      userId: 1,
-      location: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-      },
-    },
-    {
-      id: 2,
-      title: "Designer wear shoes",
-      images: [
-        {
-          url: "http://localhost:9000/assets/shoes1_full.jpg",
-          thumbnailUrl: "http://localhost:9000/assets/shoes1_thumb.jpg",
-        },
-      ],
-      categoryId: 5,
-      price: 100,
-      userId: 2,
-      location: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-      },
-    },
-    {
-      id: 102,
-      title: "Canon 400D (Great Condition)",
-      images: [
-        {
-          url: "http://localhost:9000/assets/camera1_full.jpg",
-          thumbnailUrl: "http://localhost:9000/assets/camera1_thumb.jpg",
-        },
-      ],
-      price: 300,
-      categoryId: 3,
-      userId: 1,
-      location: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-      },
-    },
-    {
-      id: 101,
-      title: "Nikon D850 for sale",
-      images: [
-        {
-          url: "http://localhost:9000/assets/camera2_full.jpg",
-          thumbnailUrl: "http://localhost:9000/assets/camera2_thumb.jpg",
-        },
-      ],
-      price: 350,
-      categoryId: 3,
-      userId: 1,
-      location: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-      },
-    },
-    {
-      id: 4,
-      title: "Sectional couch - Delivery available",
-      description: "No rips no stains no odors",
-      images: [
-        {
-          url: "http://localhost:9000/assets/couch3_full.jpg",
-          thumbnailUrl: "http://localhost:9000/assets/couch3_thumb.jpg",
-        },
-      ],
-      categoryId: 1,
-      price: 950,
-      userId: 2,
-      location: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-      },
-    },
-    {
-      id: 6,
-      title: "Brown leather shoes",
-      images: [
-        {
-          url: "http://localhost:9000/assets/shoes2_full.jpg",
-          thumbnailUrl: "http://localhost:9000/assets/shoes2_thumb.jpg",
-        },
-      ],
-      categoryId: 5,
-      price: 50,
-      userId: 2,
-      location: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-      },
-    },
-  ];
-
-  //   useEffect(() => {
-  //     loadListings();
-  //   }, []);
+  useEffect(() => {
+    getProducts().then((products) => setListings(products));
+  }, []);
 
   return (
     <>
@@ -210,8 +64,7 @@ const ProductList = ({ navigation }) => {
                   <Image
                     style={styles.image}
                     tint="light"
-                    preview={{ uri: item.images[0].thumbnailUrl }}
-                    uri={item.images[0].url}
+                    source={{uri: item.images[0]}}
                   />
                   <View style={styles.detailsContainer}>
                     <Text style={[defaultStyles.text, styles.title]}>
