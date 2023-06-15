@@ -1,10 +1,14 @@
 import * as React from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Home from "./screens/Home";
-import Login from "./screens/Login";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
-import { SplashScreen } from "./screens/SplashScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Login from "./screens/Login";
+import {
+  SplashStackNavigator,
+  SignInStackNavigator,
+} from "./screens/navigation/StackNavigation";
+import BottomTabNavigator from "./screens/navigation/TabNavigation";
+import CameraApp from "./screens/Camera";
 
 export const AuthContext = React.createContext();
 
@@ -77,13 +81,20 @@ export default function App({ navigation }) {
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <Stack.Navigator>
-          {state.isLoading ? (
-            // We haven't finished checking for the token yet
-            <Stack.Screen name="Splash" component={SplashScreen} />
-          ) : !state.user ? (
-            // No token found, user isn't signed in
-            <Stack.Screen
+        {state.isLoading ? (
+          // We haven't finished checking for the token yet
+          <SplashStackNavigator />
+        ) : false ? (
+          // No token found, user isn't signed in
+          <Stack.Navigator>
+            <SignInStackNavigator
+              options={{
+                title: "Sign in",
+                // When logging out, a pop animation feels intuitive
+                animationTypeForReplace: state.isSignout ? "pop" : "push",
+              }}
+            />
+            {/* <Stack.Screen
               name="SignIn"
               component={Login}
               options={{
@@ -91,12 +102,13 @@ export default function App({ navigation }) {
                 // When logging out, a pop animation feels intuitive
                 animationTypeForReplace: state.isSignout ? "pop" : "push",
               }}
-            />
-          ) : (
-            // User is signed in
-            <Stack.Screen name="Home" component={Home} />
-          )}
-        </Stack.Navigator>
+            /> */}
+          </Stack.Navigator>
+        ) : (
+          // User is signed in
+          // <Stack.Screen name="Home" component={Home} />
+          <BottomTabNavigator />
+        )}
       </NavigationContainer>
     </AuthContext.Provider>
   );
