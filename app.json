@@ -27,6 +27,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "gvsumarketplace"
+    "scheme": "gvsumarketplace",
+    "extra": {
+      "eas": {
+        "projectId": "f67a55fe-acd1-4e90-b003-7985c422930c"
+      }
+    }
   }
 }
