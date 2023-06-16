@@ -38,12 +38,14 @@ export async function uploadImageAsync(uri) {
 }
 
 export const saveProduct = async (data) => {
-  const { url, ...payload } = data;
-  const downloadUrl = await uploadImageAsync(data.url);
+  const { images, ...payload } = data;
+  images = images || [];
+  const allImages$ = images.map(uploadImageAsync)
+  const uploadedImages = await Promise.all(allImages$);
   const db = getDatabase();
   const res = await push(dref(db, "products/"), {
     ...payload,
-    images: [downloadUrl],
+    images: uploadedImages,
     timestamp: Date.now(),
   });
   return res;
@@ -56,11 +58,8 @@ export const getProducts = async () => {
     if (snapshot.exists()) {
       const data = snapshot?.val();
       const refinedData = Object.keys(data)
-        .map((id) => ({
-          id, ...data[id],
-        }))
+        .map((id) => ({id, ...data[id]}))
         .sort((v1, v2) => v2.timestamp - v1.timestamp);
-      console.log("values", refinedData);
       return refinedData;
     }
     return [];
