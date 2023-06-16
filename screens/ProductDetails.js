@@ -1,9 +1,11 @@
-import React from "react";
-import { View, Text, StyleSheet, KeyboardAvoidingView } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
+
 import { Image } from "react-native-elements";
+import ListItem from "../components/ListItem";
+import React from "react";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
-import ListItem from "../components/ListItem";
+
 // import ContactSellerForm from "../components/ContactSellerForm";
 
 const ProductDetails = ({ route }) => {
@@ -18,7 +20,7 @@ const ProductDetails = ({ route }) => {
         style={styles.image}
         preview={{ uri: listing.images[0].thumbnailUrl }}
         tint="light"
-        uri={listing.images[0].url}
+        source={{uri: listing.images[0]}}
       />
       <View style={styles.detailsContainer}>
         <Text style={[defaultStyles.text, styles.title]}>
