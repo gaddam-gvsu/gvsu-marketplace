@@ -1,19 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  TouchableWithoutFeedback,
-} from "react-native";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import Constants from "expo-constants";
 import { Camera, CameraType } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
-import Button from "../components/Button";
-import { Feather } from "@expo/vector-icons";
-import Colors from "../utils/Colors";
+import ButtonIcon from "../components/ButtonIcon";
+import { useFocusEffect } from "@react-navigation/native";
 
 const CameraApp = ({ navigation }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -22,6 +14,20 @@ const CameraApp = ({ navigation }) => {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: { display: "none" },
+      });
+
+      return () => {
+        navigation.getParent()?.setOptions({
+          tabBarStyle: { display: "flex" },
+        });
+      };
+    }, [])
+  );
 
   useEffect(() => {
     (async () => {
@@ -40,6 +46,7 @@ const CameraApp = ({ navigation }) => {
         const data = await cameraRef.current.takePictureAsync();
         console.log(data);
         setImage(data.uri);
+        navigation.navigate("Add Product", { imageRes: data.uri });
       } catch (error) {
         console.log(error);
       }
@@ -73,8 +80,9 @@ const CameraApp = ({ navigation }) => {
           quality: 0.5,
         });
         if (!result.canceled) {
-          // onChangeImage(result.uri);
-          navigation.navigate("Add Product", { imageRes: result.assets });
+          navigation.navigate("Add Product", {
+            imageRes: result.assets[0]["uri"],
+          });
         }
       } catch (e) {
         console.log(e);
@@ -102,12 +110,12 @@ const CameraApp = ({ navigation }) => {
               paddingHorizontal: 30,
             }}
           >
-            <Button
+            <ButtonIcon
               title=""
-              icon={type === "front" ? "camera-front" : "camera-rear"}
+              icon={!(type === "front") ? "camera-rear" : "camera-front"}
               onPress={switchCamera}
             />
-            <Button
+            <ButtonIcon
               onPress={() =>
                 setFlash(
                   flash === Camera.Constants.FlashMode.off
@@ -115,8 +123,11 @@ const CameraApp = ({ navigation }) => {
                     : Camera.Constants.FlashMode.off
                 )
               }
-              icon="flash"
+              icon={
+                !(flash === Camera.Constants.FlashMode.on) ? "flash-off" : "flash-on"
+              }
               color={flash === Camera.Constants.FlashMode.off ? "gray" : "#fff"}
+              type="material"
             />
           </View>
         </Camera>
@@ -133,23 +144,24 @@ const CameraApp = ({ navigation }) => {
               paddingHorizontal: 50,
             }}
           >
-            <Button
+            <ButtonIcon
               title="Re-take"
               onPress={() => setImage(null)}
               icon="retweet"
+              type="antDesign"
             />
-            <Button title="Save" onPress={savePicture} icon="check" />
+            <ButtonIcon title="Save" onPress={savePicture} icon="check" />
           </View>
         ) : (
           <View
             style={{
-              padding: 20,
               flexDirection: "row",
-              justifyContent: "space-between",
+              flex: 1,
+              justifyContent: "flex-start",
               paddingHorizontal: 50,
             }}
           >
-            <Button
+            <ButtonIcon
               onPress={photoLibrary}
               icon="photo-library"
               type="material"
@@ -157,8 +169,8 @@ const CameraApp = ({ navigation }) => {
             <View
               style={{
                 alignSelf: "center",
-                flex: 1,
                 alignItems: "center",
+                marginBottom: 20,
               }}
             >
               <TouchableOpacity

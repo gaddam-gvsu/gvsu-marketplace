@@ -3,16 +3,19 @@ import {
   View,
   Text,
   SafeAreaView,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
 import { Formik, useFormikContext } from "formik";
+import Constants from "expo-constants";
 import defaultStyles from "../utils/DefaultStyles";
 import Colors from "../utils/Colors";
-import Constants from "expo-constants";
 import ImageInputList from "../components/ImageInputList";
+import CategoryPickerItem from "../components/CategoryPickerItem";
+import Picker from "../components/forms/FormPicker";
+import FormField from "../components/forms/FormField";
 import UploadScreen from "./UploadScreen";
+import useLocation from "../hooks/Location";
 
 const categories = [
   {
@@ -71,36 +74,35 @@ const categories = [
   },
 ];
 
-const FormImagePicker = ({ name, imageUris }) => {
-  const { errors, setFieldValue, touched, values } = useFormikContext();
-  const handleRemove = (uri) => {
-    setFieldValue(
-      name,
-      imageUris.filter((imageUri) => imageUri !== uri)
-    );
-  };
-
-  return (
-    <>
-      <ImageInputList imageUris={imageUris} onRemoveImage={handleRemove} />
-      {/* <ErrorMessage error={errors[name]} visible={touched[name]} /> */}
-    </>
-  );
-};
-
 // Form image picker field value should be set to formik field value in useEffect
 
 const AddProduct = ({ route, navigation }) => {
-  // const location = useLocation();
+  const location = useLocation();
   const [uploadVisible, setUploadVisible] = useState(false);
   const [uploaded, setUploaded] = useState([]);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (route.params?.imageRes) {
-      setUploaded([...uploaded, route.params?.imageRes[0]["uri"]]);
+      setUploaded([...uploaded, route.params?.imageRes]);
     }
   }, [route.params?.imageRes]);
+
+  const FormImagePicker = ({ name, imageUris }) => {
+    const { setFieldValue } = useFormikContext();
+    const [iUris, setIUris] = useState(imageUris);
+    const handleRemove = (uri) => {
+      const filteredUris = iUris.filter((imageUri) => imageUri !== uri);
+      setFieldValue(name, filteredUris);
+      setIUris(filteredUris);
+    };
+
+    return (
+      <>
+        <ImageInputList imageUris={iUris} onRemoveImage={handleRemove} />
+      </>
+    );
+  };
 
   const SubmitButton = ({ title }) => {
     const { setFieldValue, handleSubmit } = useFormikContext();
@@ -117,30 +119,8 @@ const AddProduct = ({ route, navigation }) => {
     );
   };
 
-  const FormField = ({ name, width, ...otherProps }) => {
-    const { setFieldTouched, setFieldValue, values, errors, touched } =
-      useFormikContext();
-
-    return (
-      <>
-        <View style={[styles.container, { width }]}>
-          <TextInput
-            onBlur={() => setFieldTouched(name)}
-            onChangeText={(text) => setFieldValue(name, text)}
-            value={values[name]}
-            width={width}
-            placeholderTextColor={defaultStyles.colors.medium}
-            style={defaultStyles.text}
-            {...otherProps}
-          />
-        </View>
-        {/* <ErrorMessage error={errors[name]} visible={touched[name]} /> */}
-      </>
-    );
-  };
-
   const handleSubmit = async (listing, { resetForm }) => {
-    console.log("images added to form", listing);
+    console.log("images added to form", { ...listing, location });
     // setProgress(0);
     // setUploadVisible(true);
     // const result = await listingsApi.addListings(
@@ -172,7 +152,6 @@ const AddProduct = ({ route, navigation }) => {
             images: [],
           }}
           onSubmit={handleSubmit}
-          // validationSchema={validationSchema}
         >
           {() => (
             <>
@@ -207,6 +186,14 @@ const AddProduct = ({ route, navigation }) => {
                 maxLength={8}
                 name="price"
                 placeholder="Price"
+              />
+              <Picker
+                items={categories}
+                name="category"
+                numberOfColumns={3}
+                placeholder="Category"
+                PickerItemComponent={CategoryPickerItem}
+                width="50%"
               />
               <FormField
                 maxLength={255}

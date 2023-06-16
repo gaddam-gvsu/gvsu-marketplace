@@ -1,43 +1,34 @@
-import * as React from "react";
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
-import {
-  Entypo,
-  MaterialCommunityIcons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import React from "react";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import colors from "../utils/Colors";
 
-export default function Button({ title, onPress, icon, type = "materialCommunity", color }) {
+const Button = ({ title, onPress, color = "primary" }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.button}>
-      {type === "materialCommunity" ? (
-        <MaterialCommunityIcons
-          name={icon}
-          size={28}
-          color={color ? color : "#f1f1f1"}
-        />
-      ) : (
-        <MaterialIcons
-          name={icon}
-          size={28}
-          color={color ? color : "#f1f1f1"}
-        />
-      )}
+    <TouchableOpacity
+      style={[styles.button, { backgroundColor: colors[color] }]}
+      onPress={onPress}
+    >
       <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   button: {
-    height: 40,
-    flexDirection: "row",
-    alignItems: "center",
+    backgroundColor: colors.primary,
+    borderRadius: 25,
     justifyContent: "center",
+    alignItems: "center",
+    padding: 15,
+    width: "100%",
+    marginVertical: 10,
   },
   text: {
+    color: colors.white,
+    fontSize: 18,
+    textTransform: "uppercase",
     fontWeight: "bold",
-    fontSize: 16,
-    color: "#f1f1f1",
-    marginLeft: 10,
   },
 });
+
+export default Button;
