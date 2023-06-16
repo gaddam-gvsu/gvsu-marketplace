@@ -1,12 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import Constants from "expo-constants";
 import { Camera, CameraType } from "expo-camera";
+import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import Button from "../components/Button";
+import { Feather } from "@expo/vector-icons";
+import Colors from "../utils/Colors";
 
-const CameraApp = () => {
+const CameraApp = ({ navigation }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [hasLibraryPermission, setLibraryPermission] = useState(null);
   const [image, setImage] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
@@ -17,6 +28,9 @@ const CameraApp = () => {
       MediaLibrary.requestPermissionsAsync();
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermission(cameraStatus.status === "granted");
+      const libraryStatus =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      setLibraryPermission(libraryStatus.granted);
     })();
   }, []);
 
@@ -49,11 +63,26 @@ const CameraApp = () => {
     setType(type === CameraType.back ? CameraType.front : CameraType.back);
   };
 
-  const photoLibrary = () => {
-    console.log("Library hit");
-  }
+  const photoLibrary = async () => {
+    if (!hasLibraryPermission) {
+      alert("You need to enable permission to access the library");
+    } else {
+      try {
+        const result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          quality: 0.5,
+        });
+        if (!result.canceled) {
+          // onChangeImage(result.uri);
+          navigation.navigate("Add Product", { imageRes: result.assets });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
 
-  if (hasCameraPermission === false) {
+  if (!hasCameraPermission) {
     return <Text>No access to camera</Text>;
   }
 
@@ -120,7 +149,11 @@ const CameraApp = () => {
               paddingHorizontal: 50,
             }}
           >
-            <Button title="Library" onPress={photoLibrary} icon="photo-library" type="material" />
+            <Button
+              onPress={photoLibrary}
+              icon="photo-library"
+              type="material"
+            />
             <View
               style={{
                 alignSelf: "center",

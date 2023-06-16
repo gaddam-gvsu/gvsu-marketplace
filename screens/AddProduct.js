@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,15 +13,6 @@ import Colors from "../utils/Colors";
 import Constants from "expo-constants";
 import ImageInputList from "../components/ImageInputList";
 import UploadScreen from "./UploadScreen";
-// import CameraInt from "./Camera";
-
-// const validationSchema = Yup.object().shape({
-//     title: Yup.string().required().min(1).label("Title"),
-//     price: Yup.number().required().min(1).max(10000).label("Price"),
-//     description: Yup.string().label("Description"),
-//     category: Yup.object().required().nullable().label("Category"),
-//     images: Yup.array().min(1, "Please select at least one image"),
-// });
 
 const categories = [
   {
@@ -80,16 +71,8 @@ const categories = [
   },
 ];
 
-
-// Form image picker field value should be set to formik field value in useEffect
-
-const FormImagePicker = ({ name }) => {
+const FormImagePicker = ({ name, imageUris }) => {
   const { errors, setFieldValue, touched, values } = useFormikContext();
-  const imageUris = values[name];
-  const handleAdd = (uri) => {
-    setFieldValue(name, [...imageUris, uri]);
-  };
-
   const handleRemove = (uri) => {
     setFieldValue(
       name,
@@ -99,23 +82,31 @@ const FormImagePicker = ({ name }) => {
 
   return (
     <>
-      <ImageInputList
-        imageUris={imageUris}
-        onAddImage={handleAdd}
-        onRemoveImage={handleRemove}
-      />
+      <ImageInputList imageUris={imageUris} onRemoveImage={handleRemove} />
       {/* <ErrorMessage error={errors[name]} visible={touched[name]} /> */}
     </>
   );
 };
 
-const AddProduct = ({ navigation }) => {
+// Form image picker field value should be set to formik field value in useEffect
+
+const AddProduct = ({ route, navigation }) => {
   // const location = useLocation();
   const [uploadVisible, setUploadVisible] = useState(false);
+  const [uploaded, setUploaded] = useState([]);
   const [progress, setProgress] = useState(0);
 
+  useEffect(() => {
+    if (route.params?.imageRes) {
+      setUploaded([...uploaded, route.params?.imageRes[0]["uri"]]);
+    }
+  }, [route.params?.imageRes]);
+
   const SubmitButton = ({ title }) => {
-    const { handleSubmit } = useFormikContext();
+    const { setFieldValue, handleSubmit } = useFormikContext();
+    useEffect(() => {
+      setFieldValue("images", uploaded);
+    }, [uploaded]);
     return (
       <TouchableOpacity
         style={[styles.button, { backgroundColor: Colors["primary"] }]}
@@ -149,6 +140,7 @@ const AddProduct = ({ navigation }) => {
   };
 
   const handleSubmit = async (listing, { resetForm }) => {
+    console.log("images added to form", listing);
     // setProgress(0);
     // setUploadVisible(true);
     // const result = await listingsApi.addListings(
@@ -184,7 +176,9 @@ const AddProduct = ({ navigation }) => {
         >
           {() => (
             <>
-              <FormImagePicker name="images" />
+              {uploaded && (
+                <FormImagePicker name="images" imageUris={uploaded} />
+              )}
               <TouchableOpacity
                 onPress={() => navigation.navigate("Camera")}
                 style={{
@@ -221,7 +215,6 @@ const AddProduct = ({ navigation }) => {
                 numberOfLines={3}
                 placeholder="Description"
               />
-
               <SubmitButton title="Post" />
             </>
           )}
