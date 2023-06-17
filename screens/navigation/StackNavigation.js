@@ -23,7 +23,6 @@ const MainStackNavigator = () => {
     >
       <Stack.Screen name="Home" component={ProductList} />
       <Stack.Screen name="Product Details" component={ProductDetails} />
-      {/* <Stack.Screen name="Camera" component={CameraApp} /> */}
     </Stack.Navigator>
   );
 };

@@ -1,13 +1,17 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
-import Constants from "expo-constants";
-import { Camera, CameraType } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
+
+import { Camera, CameraType } from "expo-camera";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+
 import ButtonIcon from "../components/ButtonIcon";
+import Constants from "expo-constants";
 import { useFocusEffect } from "@react-navigation/native";
+import { useWindowDimensions } from 'react-native';
 
 const CameraApp = ({ navigation }) => {
+  const { height, width } = useWindowDimensions();
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [hasLibraryPermission, setLibraryPermission] = useState(null);
   const [image, setImage] = useState(null);
@@ -156,21 +160,29 @@ const CameraApp = ({ navigation }) => {
           <View
             style={{
               flexDirection: "row",
-              flex: 1,
-              justifyContent: "flex-start",
-              paddingHorizontal: 50,
+              justifyContent: 'flex-start',
             }}
           >
+            <View 
+            style={{
+              width: width/2 - 45,
+              height: 70,
+              borderWidth: 2
+            }}>
             <ButtonIcon
+              style={{
+                marginVertical: 15,
+              }}
               onPress={photoLibrary}
               icon="photo-library"
               type="material"
             />
+            </View>
             <View
               style={{
-                alignSelf: "center",
-                alignItems: "center",
-                marginBottom: 20,
+                flex: 1,
+                justifyContent: "flex-start",
+                borderWidth: 2
               }}
             >
               <TouchableOpacity

@@ -90,7 +90,7 @@ export default function App({ navigation }) {
           // No token found, user isn't signed in
           <SignInStackNavigator
             options={{
-              title: "GVSU Marketplace",
+              title: "Sign In",
               // When logging out, a pop animation feels intuitive
               animationTypeForReplace: state.isSignout ? "pop" : "push",
             }}
