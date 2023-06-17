@@ -38,7 +38,7 @@ export async function uploadImageAsync(uri) {
 }
 
 export const saveProduct = async (data) => {
-  const { images, ...payload } = data;
+  let { images, ...payload } = data;
   images = images || [];
   const allImages$ = images.map(uploadImageAsync)
   const uploadedImages = await Promise.all(allImages$);

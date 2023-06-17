@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from "react";
+import * as Location from "expo-location";
+
+import { Formik, useFormikContext } from "formik";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
   SafeAreaView,
   StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
-import { Formik, useFormikContext } from "formik";
-import Constants from "expo-constants";
-import defaultStyles from "../utils/DefaultStyles";
-import Colors from "../utils/Colors";
-import ImageInputList from "../components/ImageInputList";
+
 import CategoryPickerItem from "../components/CategoryPickerItem";
-import Picker from "../components/forms/FormPicker";
+import Colors from "../utils/Colors";
+import Constants from "expo-constants";
 import FormField from "../components/forms/FormField";
+import ImageInputList from "../components/ImageInputList";
+import Picker from "../components/forms/FormPicker";
 import UploadScreen from "./UploadScreen";
-import useLocation from "../hooks/Location";
+import defaultStyles from "../utils/DefaultStyles";
+import { saveProduct } from "../shared/firebaseApi";
 
 const categories = [
   {
@@ -77,10 +80,29 @@ const categories = [
 // Form image picker field value should be set to formik field value in useEffect
 
 const AddProduct = ({ route, navigation }) => {
-  const location = useLocation();
+  const [location, setLocation] = useState();
   const [uploadVisible, setUploadVisible] = useState(false);
   const [uploaded, setUploaded] = useState([]);
   const [progress, setProgress] = useState(0);
+
+    const getLocation = async () => {
+    try {
+      const { granted } = await Location.requestForegroundPermissionsAsync();
+      if (!granted) return;
+      const {
+        coords: { latitude, longitude },
+      } = await Location.getCurrentPositionAsync();
+      const reverseGeo = await Location.reverseGeocodeAsync({
+        latitude,
+        longitude,
+      });
+      setLocation({latitude, longitude, address: reverseGeo});
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {getLocation()}, []);
 
   useEffect(() => {
     if (route.params?.imageRes) {
@@ -120,19 +142,19 @@ const AddProduct = ({ route, navigation }) => {
   };
 
   const handleSubmit = async (listing, { resetForm }) => {
-    console.log("images added to form", { ...listing, location });
-    // setProgress(0);
-    // setUploadVisible(true);
-    // const result = await listingsApi.addListings(
-    //   { ...listing, location },
-    //   (progress) => setProgress(progress)
-    // );
-
-    // if (!result.ok) {
-    //   setUploadVisible(false);
-    //   return alert("Could not save the listing");
-    // }
+    const {address, ...loc} = location;
+    const data = { 
+      title: listing.title,
+      price: listing.price,
+      category: listing.category.label,
+      description: listing.description,
+      images: listing.images,
+      location: loc,
+      address
+    };
+    await saveProduct(data);
     resetForm();
+    navigation.navigate('Home', {refresh: true});
   };
 
   return (

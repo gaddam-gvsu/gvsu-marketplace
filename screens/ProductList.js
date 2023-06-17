@@ -15,13 +15,22 @@ import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
 import { getProducts } from "../shared/firebaseApi";
 
-const ProductList = ({ navigation }) => {
+const ProductList = ({ route, navigation }) => {
   const loading = false;
   const [listings, setListings] = useState([]);
 
-  useEffect(() => {
+
+  const fetchProducts = () => {
     getProducts().then((products) => setListings(products));
-  }, []);
+  }
+
+  useEffect(fetchProducts, []);
+
+  useEffect(() => {
+    if(route.params?.refresh) {
+      fetchProducts();
+    }
+  }, [route.params?.refresh]);
 
   return (
     <>
