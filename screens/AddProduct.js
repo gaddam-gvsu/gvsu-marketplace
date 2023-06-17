@@ -1,7 +1,7 @@
 import * as Location from "expo-location";
 
 import { Formik, useFormikContext } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 
+import { AuthContext } from "../App";
 import CategoryPickerItem from "../components/CategoryPickerItem";
 import Colors from "../utils/Colors";
 import Constants from "expo-constants";
@@ -80,6 +81,7 @@ const categories = [
 // Form image picker field value should be set to formik field value in useEffect
 
 const AddProduct = ({ route, navigation }) => {
+  const { user } = useContext(AuthContext);
   const [location, setLocation] = useState();
   const [uploadVisible, setUploadVisible] = useState(false);
   const [uploaded, setUploaded] = useState([]);
@@ -150,7 +152,8 @@ const AddProduct = ({ route, navigation }) => {
       description: listing.description,
       images: listing.images,
       location: loc,
-      address
+      address,
+      email: user.email
     };
     await saveProduct(data);
     resetForm();
