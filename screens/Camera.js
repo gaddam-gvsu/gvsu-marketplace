@@ -15,8 +15,8 @@ const CameraApp = ({ navigation }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [hasLibraryPermission, setLibraryPermission] = useState(null);
   const [image, setImage] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
+  const [type, setType] = useState(CameraType.front);
+  const [flash, setFlash] = useState(Camera.Constants.FlashMode.on);
   const cameraRef = useRef(null);
 
   useFocusEffect(
@@ -48,7 +48,6 @@ const CameraApp = ({ navigation }) => {
     if (cameraRef) {
       try {
         const data = await cameraRef.current.takePictureAsync();
-        console.log(data);
         setImage(data.uri);
         navigation.navigate("Add Product", { imageRes: data.uri });
       } catch (error) {
@@ -116,7 +115,7 @@ const CameraApp = ({ navigation }) => {
           >
             <ButtonIcon
               title=""
-              icon={!(type === "front") ? "camera-rear" : "camera-front"}
+              icon={!(type === CameraType.front) ? "camera-front" : "camera-rear"}
               onPress={switchCamera}
             />
             <ButtonIcon
@@ -128,7 +127,7 @@ const CameraApp = ({ navigation }) => {
                 )
               }
               icon={
-                !(flash === Camera.Constants.FlashMode.on) ? "flash-off" : "flash-on"
+                !(flash === Camera.Constants.FlashMode.on) ? "flash-on" : "flash-off"
               }
               color={flash === Camera.Constants.FlashMode.off ? "gray" : "#fff"}
               type="material"

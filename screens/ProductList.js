@@ -7,13 +7,12 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-
-import Constants from "expo-constants";
 import { Image } from "react-native-elements";
 import LottieView from "lottie-react-native";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
 import { getProducts } from "../shared/firebaseApi";
+import { Feather } from "@expo/vector-icons";
 
 const ProductList = ({ route, navigation }) => {
   const loading = false;
@@ -73,7 +72,7 @@ const ProductList = ({ route, navigation }) => {
                   <Image
                     style={styles.image}
                     tint="light"
-                    source={{uri: item.images[0]}}
+                    source={{ uri: item.images[0] }}
                   />
                   <View style={styles.detailsContainer}>
                     <Text style={[defaultStyles.text, styles.title]}>
@@ -82,6 +81,22 @@ const ProductList = ({ route, navigation }) => {
                     <Text style={[defaultStyles.text, styles.subTitle]}>
                       {"$" + item.price}
                     </Text>
+                    {item.address && (
+                      <View style={styles.nestedButtonView}>
+                        <Feather
+                          style={[
+                            defaultStyles.text,
+                            styles.subTitle,
+                            { marginRight: 5 },
+                          ]}
+                          name="map-pin"
+                          size={22}
+                        ></Feather>
+                        <Text style={[defaultStyles.text, styles.subTitle]}>
+                          {`${item.address[0].city}, ${item.address[0].region}`}
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 </View>
               </TouchableWithoutFeedback>
@@ -101,7 +116,6 @@ const listStyle = {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight,
     ...listStyle,
   },
   view: {
@@ -122,7 +136,7 @@ const styles = StyleSheet.create({
     height: 200,
   },
   subTitle: {
-    color: colors.secondary,
+    color: colors.black,
     fontWeight: "bold",
   },
   title: {
@@ -150,6 +164,13 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     position: "absolute",
     zIndex: 1,
+  },
+  headerIcon: {
+    color: "white",
+  },
+  nestedButtonView: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 

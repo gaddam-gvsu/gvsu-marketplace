@@ -14,7 +14,8 @@ import {
 import { AuthContext } from "../App";
 import CategoryPickerItem from "../components/CategoryPickerItem";
 import Colors from "../utils/Colors";
-import Constants from "expo-constants";
+import Button from "../components/Button";
+import Picker from "../components/forms/FormPicker";
 import FormField from "../components/forms/FormField";
 import ImageInputList from "../components/ImageInputList";
 import Picker from "../components/forms/FormPicker";
@@ -136,7 +137,7 @@ const AddProduct = ({ route, navigation }) => {
     }, [uploaded]);
     return (
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: Colors["primary"] }]}
+        style={[styles.button, { backgroundColor: Colors.primary }]}
         onPress={handleSubmit}
       >
         <Text style={styles.text}>{title}</Text>
@@ -181,54 +182,42 @@ const AddProduct = ({ route, navigation }) => {
         >
           {() => (
             <>
-              {uploaded && (
-                <FormImagePicker name="images" imageUris={uploaded} />
-              )}
-              <TouchableOpacity
-                onPress={() => navigation.navigate("Camera")}
-                style={{
-                  width: 130,
-                  borderRadius: 4,
-                  backgroundColor: "#14274e",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: 40,
-                }}
-              >
-                <Text
-                  style={{
-                    color: "#fff",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  Take picture
-                </Text>
-              </TouchableOpacity>
-              <FormField maxLength={255} name="title" placeholder="Title" />
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={{ margin: 15, fontSize: 18 }}>{"Category"}</Text>
+                <Picker
+                  items={categories}
+                  name="category"
+                  numberOfColumns={3}
+                  label="Category"
+                  PickerItemComponent={CategoryPickerItem}
+                  width="50%"
+                />
+              </View>
+              <FormField maxLength={255} name="title" label="Title" />
               <FormField
                 keyboardType="numeric"
                 maxLength={8}
                 name="price"
-                placeholder="Price"
-              />
-              <Picker
-                items={categories}
-                name="category"
-                numberOfColumns={3}
-                placeholder="Category"
-                PickerItemComponent={CategoryPickerItem}
-                width="50%"
+                label="Price"
               />
               <FormField
                 maxLength={255}
                 multiline
                 name="description"
                 numberOfLines={3}
-                placeholder="Description"
+                label="Description"
               />
-              <SubmitButton title="Post" />
+
+              <Button
+                style={styles.text}
+                title="Add Image(s)"
+                onPress={() => navigation.navigate("Camera")}
+              />
+
+              {uploaded && (
+                <FormImagePicker name="images" imageUris={uploaded} />
+              )}
+              <SubmitButton title="Save" />
             </>
           )}
         </Formik>
@@ -239,7 +228,6 @@ const AddProduct = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   screen: {
-    paddingTop: Constants.statusBarHeight,
     flex: 1,
   },
   view: {
@@ -256,13 +244,15 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   button: {
+    flexDirection: "row",
     backgroundColor: Colors.primary,
-    borderRadius: 25,
+    borderRadius: 5,
     justifyContent: "center",
-    alignItems: "center",
+    alignSelf: "center",
     padding: 15,
-    width: "100%",
-    marginVertical: 10,
+    margin: 50,
+    bottom: 0,
+    width: "30%",
   },
   text: {
     color: Colors.white,

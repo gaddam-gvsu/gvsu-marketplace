@@ -7,20 +7,20 @@ import React from "react";
 import { SplashScreen } from "../SplashScreen";
 import UserProfile from "../UserProfile";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Colors from "../../utils/Colors";
 
 const Stack = createNativeStackNavigator();
+const headerOptions = {
+  headerStyle: {
+    backgroundColor: Colors.primary,
+  },
+  headerTintColor: Colors.white,
+  headerBackTitle: "Back",
+};
 
 const MainStackNavigator = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: "#9AC4F8",
-        },
-        headerTintColor: "white",
-        headerBackTitle: "Back",
-      }}
-    >
+    <Stack.Navigator screenOptions={headerOptions}>
       <Stack.Screen name="Home" component={ProductList} />
       <Stack.Screen name="Product Details" component={ProductDetails} />
     </Stack.Navigator>
@@ -29,15 +29,7 @@ const MainStackNavigator = () => {
 
 const ProductStackNavigator = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: "#9AC4F8",
-        },
-        headerTintColor: "white",
-        headerBackTitle: "Back",
-      }}
-    >
+    <Stack.Navigator screenOptions={headerOptions}>
       <Stack.Screen name="Add Product" component={AddProduct} />
       <Stack.Screen name="Camera" component={CameraApp} />
     </Stack.Navigator>
@@ -46,15 +38,7 @@ const ProductStackNavigator = () => {
 
 const ProfileStackNavigator = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: "#9AC4F8",
-        },
-        headerTintColor: "white",
-        headerBackTitle: "Back",
-      }}
-    >
+    <Stack.Navigator screenOptions={headerOptions}>
       <Stack.Screen name="Profile" component={UserProfile} />
     </Stack.Navigator>
   );

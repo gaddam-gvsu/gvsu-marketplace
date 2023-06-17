@@ -5,6 +5,7 @@ import defaultStyles from "../utils/DefaultStyles";
 import CText from "./Text";
 import SafeView from "./SafeView";
 import PickerItem from "./PickerItem";
+import Colors from '../utils/Colors';
 
 const Picker = ({ icon, items, placeholder, onSelectItem, numberOfColumns=1, selectedItem, width='100%', PickerItemComponent = PickerItem }) => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -61,10 +62,13 @@ const Picker = ({ icon, items, placeholder, onSelectItem, numberOfColumns=1, sel
 const styles = StyleSheet.create({
     container: {
         backgroundColor: defaultStyles.colors.light,
-        borderRadius: 25,
+        borderRadius: 5,
         flexDirection: 'row',
-        padding: 15,
-        marginVertical: 10
+        padding: 10,
+        margin: 15,
+        borderWidth: 1,
+        borderColor: Colors.primary,
+        width: "100%"
     },
     icon:{
         marginRight: 10,
@@ -74,7 +78,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     text: {
-        flex: 1
+        flex: 1,
     }
 });
 

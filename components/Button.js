@@ -16,12 +16,12 @@ const Button = ({ title, onPress, color = "primary" }) => {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.primary,
-    borderRadius: 25,
+    borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
     padding: 15,
-    width: "100%",
-    marginVertical: 10,
+    width: "50%",
+    margin: 18,
   },
   text: {
     color: colors.white,

@@ -1,17 +1,18 @@
 import React from "react";
 import { useFormikContext } from "formik";
-import InputText from "../InputText";
+import PInputText from "../PInputText";
 
 const FormField = ({ name, width, ...otherProps }) => {
   const { setFieldTouched, setFieldValue, values } = useFormikContext();
 
   return (
     <>
-      <InputText
+      <PInputText
         onBlur={() => setFieldTouched(name)}
         onChangeText={(text) => setFieldValue(name, text)}
         value={values[name]}
         width={width}
+        mode="outlined"
         {...otherProps}
       />
     </>
