@@ -52,10 +52,15 @@ const ProductList = ({ route, navigation }) => {
   }, [location]);
 
   useEffect(() => {
-    if(route.params?.refresh) {
-      fetchProducts();
-    }
-  }, [route.params?.refresh]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      if(route.params?.refresh) {
+        fetchProducts();
+      }
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <>

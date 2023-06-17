@@ -25,7 +25,6 @@ const CustomButton = ({ children, onPress }) => {
 };
 
 const BottomTabNavigator = () => {
-  const { user, signOut } = useContext(AuthContext);
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen
@@ -50,7 +49,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={user.given_name}
+        name='Profile'
         component={ProfileStackNavigator}
         options={{
           tabBarShowLabel: false,

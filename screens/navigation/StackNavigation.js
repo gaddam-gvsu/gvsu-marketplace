@@ -1,10 +1,12 @@
+import React, { useContext } from "react";
+
 import AddProduct from "../AddProduct";
+import { AuthContext } from "../../utils/Context";
 import CameraApp from "../Camera";
 import Colors from "../../utils/Colors";
 import Login from "../Login";
 import ProductDetails from "../ProductDetails";
 import ProductList from "../ProductList";
-import React from "react";
 import { SplashScreen } from "../SplashScreen";
 import UserProfile from "../UserProfile";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -37,9 +39,11 @@ const ProductStackNavigator = () => {
 };
 
 const ProfileStackNavigator = () => {
+  const { user } = useContext(AuthContext);
+
   return (
     <Stack.Navigator screenOptions={headerOptions}>
-      <Stack.Screen name="Profile" component={UserProfile} />
+      <Stack.Screen name={`Profile - ${user.name}`} component={UserProfile} />
     </Stack.Navigator>
   );
 };
