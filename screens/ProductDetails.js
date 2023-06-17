@@ -1,5 +1,7 @@
+import * as Analytics from "expo-firebase-analytics";
+
 import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 
 import { AuthContext } from "../utils/Context";
 import Button from "../components/Button";
@@ -8,13 +10,24 @@ import ListItem from "../components/ListItem";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
 import { removeProduct } from "../shared/firebaseApi";
+import { useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 // import ContactSellerForm from "../components/ContactSellerForm";
 
 const ProductDetails = ({ route, navigation }) => {
   const listing = route.params;
   const { user } = useContext(AuthContext);
-  console.log("user data", user);
+
+  useFocusEffect(
+    useCallback(() => {
+      Analytics.logEvent("select_item", {
+        item_list_name: listing.title,
+        id: String(user?.id)
+      });
+    }, [])
+  );
+
 
   const removeListing = async () => {
     await removeProduct(listing);

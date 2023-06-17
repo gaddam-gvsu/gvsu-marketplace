@@ -1,3 +1,4 @@
+import * as Analytics from "expo-firebase-analytics";
 import * as React from "react";
 
 import {
@@ -6,15 +7,16 @@ import {
 } from "./screens/navigation/StackNavigation";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "./utils/Context";
 import BottomTabNavigator from "./screens/navigation/TabNavigation";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { AuthContext } from "./utils/Context";
-
 
 const Stack = createNativeStackNavigator();
 
 export default function App({ navigation }) {
+  const navRef = React.useRef();
+  const routeNameRef = React.useRef();
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -80,7 +82,22 @@ export default function App({ navigation }) {
 
   return (
     <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
+      <NavigationContainer
+      ref={navRef}
+      onReady={() =>
+        (routeNameRef.current = navRef.current.getCurrentRoute().name)}
+        onStateChange={ async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navRef.current.getCurrentRoute().name;
+        if (previousRouteName !== currentRouteName) {
+          await Analytics.logEvent("screen_view", {
+            screen_name: currentRouteName,
+            screen_class: currentRouteName,
+            id: state.user?.id ? String(state.user?.id) : "unknown"
+          });
+        }
+       routeNameRef.current = currentRouteName;
+    }}>
         {state.isLoading ? (
           // We haven't finished checking for the token yet
           <SplashStackNavigator />

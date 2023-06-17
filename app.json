@@ -23,20 +23,30 @@
         "backgroundColor": "#ffffff"
       },
       "config": {
-        "googleMaps" : {
-          "apiKey" : "AIzaSyCmis1kdFSad9hU23Pj8d64S281_BR627E"
+        "googleMaps": {
+          "apiKey": "AIzaSyCmis1kdFSad9hU23Pj8d64S281_BR627E"
         }
       },
+      "googleServicesFile": "./google-services.json",
       "package": "com.anonymous.gvsumarketplace"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "config": {
+        "firebase": {
+          "apiKey": "AIzaSyCmis1kdFSad9hU23Pj8d64S281_BR627E",
+          "measurementId": "G-WPJTD1M192"
+        }
+      }
     },
     "scheme": "gvsumarketplace",
     "extra": {
       "eas": {
         "projectId": "f67a55fe-acd1-4e90-b003-7985c422930c"
       }
-    }
+    },
+    "plugins": [
+      "expo-build-properties"
+    ]
   }
 }

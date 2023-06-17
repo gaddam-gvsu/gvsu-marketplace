@@ -18,11 +18,12 @@ import { randomUUID } from "expo-crypto";
 const firebaseConfig = {
   apiKey: "AIzaSyCmis1kdFSad9hU23Pj8d64S281_BR627E",
   authDomain: "gvsu-marketplace.firebaseapp.com",
+  databaseURL: "https://gvsu-marketplace-default-rtdb.firebaseio.com",
   projectId: "gvsu-marketplace",
   storageBucket: "gvsu-marketplace.appspot.com",
   messagingSenderId: "749426793103",
   appId: "1:749426793103:web:dd66416ec4ce080faf2efa",
-  measurementId: "G-WPJTD1M192",
+  measurementId: "G-WPJTD1M192"
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);
