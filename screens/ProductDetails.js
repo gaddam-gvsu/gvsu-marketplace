@@ -1,25 +1,21 @@
 import * as Analytics from "expo-firebase-analytics";
 
-import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
-import React, { useCallback, useContext } from "react";
 import {
   KeyboardAvoidingView,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
+  View,
 } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 
 import { AuthContext } from "../utils/Context";
 import { Image } from "react-native-elements";
+import ShowMap from "./MapView";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
 import { removeProduct } from "../shared/firebaseApi";
-import { useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import ShowMap from "./MapView";
-import Colors from "../utils/Colors";
 
 // import ContactSellerForm from "../components/ContactSellerForm";
 
@@ -41,7 +37,7 @@ const ProductDetails = ({ route, navigation }) => {
       headerRight: () =>
         user.email === listing.email && (
           <TouchableOpacity onPress={removeListing}>
-            <Text style={{ color: Colors.white }}>Remove</Text>
+            <Text style={{ color: colors.white }}>Remove</Text>
           </TouchableOpacity>
         ),
     });
