@@ -9,12 +9,13 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
+
+import { Feather } from "@expo/vector-icons";
 import { Image } from "react-native-elements";
 import LottieView from "lottie-react-native";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
 import { getProducts } from "../shared/firebaseApi";
-import { Feather } from "@expo/vector-icons";
 
 const ProductList = ({ route, navigation }) => {
   const loading = false;
@@ -122,6 +123,9 @@ const ProductList = ({ route, navigation }) => {
                         </Text>
                       </View>
                     )}
+                    <Text>
+                      {item.distance} Mi
+                    </Text>
                   </View>
                 </View>
               </TouchableWithoutFeedback>

@@ -4,6 +4,8 @@ export function toMiles(dist) {
 
 // Computes distance between two geo coordinates in kilometers.
 export function computeDistance(location1, location2) {
+    // console.log("locs: ",location1, location2);
+
   let { latitude: lat1, longitude: lon1 } = location1;
   let { latitude: lat2, longitude: lon2 } = location2;
   var R = 6371; // km (change this constant to get miles)
@@ -19,6 +21,7 @@ export function computeDistance(location1, location2) {
   var d = R * c;
 
   d = toMiles(d);
+  console.log("d", d);
 
   return round(d, 3);
 }

@@ -66,7 +66,7 @@ export const getProducts = async (location) => {
     if (snapshot.exists()) {
       const data = snapshot?.val();
       const refinedData = Object.keys(data)
-        .map((id) => ({id, ...data[id]}))
+        .map((id) => ({id, ...data[id], distance: computeDistance(location, data[id].location)}))
         .sort((v1, v2) => v2.timestamp - v1.timestamp);
       return refinedData;
     }
