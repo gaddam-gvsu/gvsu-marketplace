@@ -8,20 +8,22 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 
+import Colors from "../utils/Colors";
 import { Feather } from "@expo/vector-icons";
 import { Image } from "react-native-elements";
 import LottieView from "lottie-react-native";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
 import { getProducts } from "../shared/firebaseApi";
-import Colors from "../utils/Colors";
+import { useIsFocused } from "@react-navigation/native";
 
 const ProductList = ({ route, navigation }) => {
   const loading = false;
   const [listings, setListings] = useState([]);
   const [location, setLocation] = useState();
+  const isFocused = useIsFocused();
 
   const getLocation = async () => {
     try {
@@ -68,7 +70,7 @@ const ProductList = ({ route, navigation }) => {
     if (location) {
       fetchProducts();
     }
-  }, [location]);
+  }, [location, isFocused]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {

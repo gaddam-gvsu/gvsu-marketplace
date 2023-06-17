@@ -13,7 +13,7 @@ import {
 import { computeDistance } from "../utils/distanceUtil";
 import { getBlob } from "../utils/blobUtil";
 import { initializeApp } from "firebase/app";
-import { randomUUID } from "expo-crypto";
+import { uuidv4 } from "../utils/uuid";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCmis1kdFSad9hU23Pj8d64S281_BR627E",
@@ -31,7 +31,7 @@ export const firebaseApp = initializeApp(firebaseConfig);
 const storage = getStorage(firebaseApp);
 export async function uploadImageAsync(uri) {
   const blob = await getBlob(uri);
-  const storageRef = sref(storage, randomUUID());
+  const storageRef = sref(storage, uuidv4());
 
   // 'file' comes from the Blob or File API
   const snapshot = await uploadBytes(storageRef, blob);
