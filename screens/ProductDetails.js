@@ -1,16 +1,23 @@
+import { Button, Image } from "react-native-elements";
 import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
+import React, { useContext } from "react";
 
-import { Image } from "react-native-elements";
+import { AuthContext } from "../App";
 import ListItem from "../components/ListItem";
-import React from "react";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
+import { removeProduct } from "../shared/firebaseApi";
 
 // import ContactSellerForm from "../components/ContactSellerForm";
 
-const ProductDetails = ({ route }) => {
+const ProductDetails = ({ route, navigation }) => {
   const listing = route.params;
+  const { user } = useContext(AuthContext);
 
+  const removeListing = async () => {
+    await removeProduct(listing);
+    navigation.navigate('Home', {refresh: true});
+  }
   return (
     <KeyboardAvoidingView
       behavior="position"
@@ -38,6 +45,7 @@ const ProductDetails = ({ route }) => {
         </View>
         {/* <ContactSellerForm listing={listing} /> */}
       </View>
+      { user.email === listing.email && <Button title="Remove" onPress={removeListing}/>}
     </KeyboardAvoidingView>
   );
 };

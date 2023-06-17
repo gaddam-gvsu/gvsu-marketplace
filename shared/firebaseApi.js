@@ -2,7 +2,7 @@
 
 // import { collection, doc, getDoc, getDocs, getFirestore } from "firebase/firestore";
 
-import { child, ref as dref, get, getDatabase, push } from "firebase/database";
+import { child, ref as dref, get, getDatabase, push, remove } from "firebase/database";
 import {
   getDownloadURL,
   getStorage,
@@ -50,6 +50,13 @@ export const saveProduct = async (data) => {
   });
   return res;
 };
+
+export const removeProduct = async (product) => {
+  const prodLocation = `products/${product.id}`;
+  console.log(prodLocation);
+  const db = getDatabase();
+  return await remove(dref(db, prodLocation));
+}
 
 export const getProducts = async () => {
   try {
