@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 
 import { Feather } from "@expo/vector-icons";
 import { Image } from "react-native-elements";
@@ -16,6 +16,7 @@ import LottieView from "lottie-react-native";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
 import { getProducts } from "../shared/firebaseApi";
+import Colors from "../utils/Colors";
 
 const ProductList = ({ route, navigation }) => {
   const loading = false;
@@ -35,25 +36,43 @@ const ProductList = ({ route, navigation }) => {
     }
   };
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerSearchBarOptions: {
+        headerIconColor: Colors.white,
+        textColor: Colors.white,
+        hintTextColor: Colors.white,
+        placeHolder: "Search",
+        onChangeText: (event) => {
+          handleFilter(event.nativeEvent.text);
+        },
+      },
+    });
+  }, [navigation]);
+
   useEffect(() => {
-      getLocation();
+    getLocation();
   }, []);
 
-
   const fetchProducts = () => {
-    console.log('fetch ', location);
     getProducts(location).then((products) => setListings(products));
-  }
+  };
+
+  const handleFilter = (searchTxt) => {
+    return listings.filter((listing) => {
+      return listing.title.toUpperCase() === searchTxt.toUpperCase();
+    });
+  };
 
   useEffect(() => {
-    if(location) {
+    if (location) {
       fetchProducts();
     }
   }, [location]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      if(location) {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (location) {
         fetchProducts();
       }
     });
@@ -128,9 +147,7 @@ const ProductList = ({ route, navigation }) => {
                         </Text>
                       </View>
                     )}
-                    <Text>
-                      {item.distance} Mi
-                    </Text>
+                    <Text>{item.distance} Mi</Text>
                   </View>
                 </View>
               </TouchableWithoutFeedback>

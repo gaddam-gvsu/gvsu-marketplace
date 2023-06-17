@@ -8,7 +8,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import ButtonIcon from "../components/ButtonIcon";
 import Constants from "expo-constants";
 import { useFocusEffect } from "@react-navigation/native";
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions } from "react-native";
 
 const CameraApp = ({ navigation }) => {
   const { height, width } = useWindowDimensions();
@@ -21,6 +21,9 @@ const CameraApp = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
+      navigation.setOptions({
+        headerShown: false,
+      });
       navigation.getParent()?.setOptions({
         tabBarStyle: { display: "none" },
       });
@@ -115,7 +118,9 @@ const CameraApp = ({ navigation }) => {
           >
             <ButtonIcon
               title=""
-              icon={!(type === CameraType.front) ? "camera-front" : "camera-rear"}
+              icon={
+                !(type === CameraType.front) ? "camera-front" : "camera-rear"
+              }
               onPress={switchCamera}
             />
             <ButtonIcon
@@ -127,7 +132,9 @@ const CameraApp = ({ navigation }) => {
                 )
               }
               icon={
-                !(flash === Camera.Constants.FlashMode.on) ? "flash-on" : "flash-off"
+                !(flash === Camera.Constants.FlashMode.on)
+                  ? "flash-on"
+                  : "flash-off"
               }
               color={flash === Camera.Constants.FlashMode.off ? "gray" : "#fff"}
               type="material"
@@ -159,29 +166,30 @@ const CameraApp = ({ navigation }) => {
           <View
             style={{
               flexDirection: "row",
-              justifyContent: 'flex-start',
+              justifyContent: "flex-start",
             }}
           >
-            <View 
-            style={{
-              width: width/2 - 45,
-              height: 70,
-              borderWidth: 2
-            }}>
-            <ButtonIcon
+            <View
               style={{
-                marginVertical: 15,
+                width: width / 2 - 45,
+                height: 70,
+                borderWidth: 2,
               }}
-              onPress={photoLibrary}
-              icon="photo-library"
-              type="material"
-            />
+            >
+              <ButtonIcon
+                style={{
+                  marginVertical: 15,
+                }}
+                onPress={photoLibrary}
+                icon="photo-library"
+                type="material"
+              />
             </View>
             <View
               style={{
                 flex: 1,
                 justifyContent: "flex-start",
-                borderWidth: 2
+                borderWidth: 2,
               }}
             >
               <TouchableOpacity
