@@ -4,6 +4,7 @@ import { Formik, useFormikContext } from "formik";
 import React, { useContext, useEffect, useState } from "react";
 import {
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -162,7 +163,7 @@ const AddProduct = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <View style={styles.view}>
+      <ScrollView style={styles.view}>
         <UploadScreen
           onDone={() => setUploadVisible(false)}
           progress={progress}
@@ -231,7 +232,7 @@ const AddProduct = ({ route, navigation }) => {
             </>
           )}
         </Formik>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
