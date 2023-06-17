@@ -6,7 +6,7 @@ import {
 import React, { useContext } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { AuthContext } from "../../App";
+import { AuthContext } from "../../utils/Context";
 import { DefaultTheme } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../utils/Colors";

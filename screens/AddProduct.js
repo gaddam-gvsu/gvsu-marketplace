@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 
-import { AuthContext } from "../App";
+import { AuthContext } from "../utils/Context";
 import Button from "../components/Button";
 import CategoryPickerItem from "../components/CategoryPickerItem";
 import Colors from "../utils/Colors";

@@ -2,7 +2,7 @@ import { Button, Image } from "react-native-elements";
 import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
 import React, { useContext } from "react";
 
-import { AuthContext } from "../App";
+import { AuthContext } from "../utils/Context";
 import ListItem from "../components/ListItem";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
@@ -13,11 +13,12 @@ import { removeProduct } from "../shared/firebaseApi";
 const ProductDetails = ({ route, navigation }) => {
   const listing = route.params;
   const { user } = useContext(AuthContext);
+  console.log("user data", user);
 
   const removeListing = async () => {
     await removeProduct(listing);
-    navigation.navigate('Home', {refresh: true});
-  }
+    navigation.navigate("Home", { refresh: true });
+  };
   return (
     <KeyboardAvoidingView
       behavior="position"
@@ -27,15 +28,11 @@ const ProductDetails = ({ route, navigation }) => {
         style={styles.image}
         preview={{ uri: listing.images[0].thumbnailUrl }}
         tint="light"
-        source={{uri: listing.images[0]}}
+        source={{ uri: listing.images[0] }}
       />
       <View style={styles.detailsContainer}>
-        <Text style={[defaultStyles.text, styles.title]}>
-          {listing.title}
-        </Text>
-        <Text style={[defaultStyles.text, styles.price]}>
-          {listing.price}
-        </Text>
+        <Text style={[defaultStyles.text, styles.title]}>{listing.title}</Text>
+        <Text style={[defaultStyles.text, styles.price]}>{listing.price}</Text>
         <View style={styles.userContainer}>
           <ListItem
             image={require("../assets/icon.png")}
@@ -45,7 +42,9 @@ const ProductDetails = ({ route, navigation }) => {
         </View>
         {/* <ContactSellerForm listing={listing} /> */}
       </View>
-      { user.email === listing.email && <Button title="Remove" onPress={removeListing}/>}
+      {user.email === listing.email && (
+        <Button title="Remove" onPress={removeListing} />
+      )}
     </KeyboardAvoidingView>
   );
 };

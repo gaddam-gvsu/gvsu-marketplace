@@ -5,7 +5,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { useContext, useEffect, useState } from "react";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AuthContext } from "../App";
+import { AuthContext } from "../utils/Context";
 
 WebBrowser.maybeCompleteAuthSession();
 

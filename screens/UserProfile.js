@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { AuthContext } from '../App';
+import { AuthContext } from "../utils/Context";
 import { Button } from 'react-native-elements';
 import { useContext } from 'react';
 

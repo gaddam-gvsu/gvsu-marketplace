@@ -21,7 +21,7 @@ const headerOptions = {
 const MainStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={headerOptions}>
-      <Stack.Screen name="Home1" component={ProductList} />
+      <Stack.Screen name="Products" component={ProductList} />
       <Stack.Screen name="Product Details" component={ProductDetails} />
     </Stack.Navigator>
   );

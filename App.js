@@ -7,12 +7,10 @@ import {
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BottomTabNavigator from "./screens/navigation/TabNavigation";
-import CameraApp from "./screens/Camera";
-import Login from "./screens/Login";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { AuthContext } from "./utils/Context";
 
-export const AuthContext = React.createContext();
 
 const Stack = createNativeStackNavigator();
 
