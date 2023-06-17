@@ -29,7 +29,7 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen
-        name="Main Nav"
+        name="Home"
         component={MainStackNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
