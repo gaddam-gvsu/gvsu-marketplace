@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from "react-native";
 
 import { AuthContext } from "../utils/Context";
-import { Button } from 'react-native-elements';
-import { useContext } from 'react';
+import Button from "../components/Button";
+import { useContext } from "react";
 
 const UserProfile = () => {
   const { user, signOut } = useContext(AuthContext);
@@ -12,14 +12,14 @@ const UserProfile = () => {
       <Button title="Sign out" onPress={signOut} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

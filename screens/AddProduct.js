@@ -159,8 +159,9 @@ const AddProduct = ({ route, navigation }) => {
       email: user.email,
     };
     await saveProduct(data);
+    setUploaded([]);
     resetForm();
-    navigation.navigate("Home", { refresh: true });
+    navigation.navigate("Products", { refresh: true });
   };
 
   return (

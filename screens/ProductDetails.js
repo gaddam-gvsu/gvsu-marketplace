@@ -1,8 +1,9 @@
-import { Button, Image } from "react-native-elements";
 import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
 import React, { useContext } from "react";
 
 import { AuthContext } from "../utils/Context";
+import Button from "../components/Button";
+import { Image } from "react-native-elements";
 import ListItem from "../components/ListItem";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
@@ -17,7 +18,7 @@ const ProductDetails = ({ route, navigation }) => {
 
   const removeListing = async () => {
     await removeProduct(listing);
-    navigation.navigate("Home", { refresh: true });
+    navigation.navigate("Products", { refresh: true });
   };
   return (
     <KeyboardAvoidingView
@@ -43,13 +44,21 @@ const ProductDetails = ({ route, navigation }) => {
         {/* <ContactSellerForm listing={listing} /> */}
       </View>
       {user.email === listing.email && (
-        <Button title="Remove" onPress={removeListing} />
+        <View style={styles.container}>
+          <Button title="Remove" onPress={removeListing} />
+        </View>
       )}
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    // flex: 1,
+    // backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   detailsContainer: {
     padding: 20,
   },
