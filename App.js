@@ -1,14 +1,16 @@
 import * as React from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "./screens/Login";
+
 import {
-  SplashStackNavigator,
   SignInStackNavigator,
+  SplashStackNavigator,
 } from "./screens/navigation/StackNavigation";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import BottomTabNavigator from "./screens/navigation/TabNavigation";
 import CameraApp from "./screens/Camera";
+import Login from "./screens/Login";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 export const AuthContext = React.createContext();
 
@@ -84,26 +86,15 @@ export default function App({ navigation }) {
         {state.isLoading ? (
           // We haven't finished checking for the token yet
           <SplashStackNavigator />
-        ) : false ? (
+        ) : !state.user ? (
           // No token found, user isn't signed in
-          <Stack.Navigator>
-            <SignInStackNavigator
-              options={{
-                title: "Sign in",
-                // When logging out, a pop animation feels intuitive
-                animationTypeForReplace: state.isSignout ? "pop" : "push",
-              }}
-            />
-            {/* <Stack.Screen
-              name="SignIn"
-              component={Login}
-              options={{
-                title: "Sign in",
-                // When logging out, a pop animation feels intuitive
-                animationTypeForReplace: state.isSignout ? "pop" : "push",
-              }}
-            /> */}
-          </Stack.Navigator>
+          <SignInStackNavigator
+            options={{
+              title: "Sign in",
+              // When logging out, a pop animation feels intuitive
+              animationTypeForReplace: state.isSignout ? "pop" : "push",
+            }}
+          />
         ) : (
           // User is signed in
           // <Stack.Screen name="Home" component={Home} />
