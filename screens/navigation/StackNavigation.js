@@ -1,5 +1,6 @@
 import AddProduct from "../AddProduct";
 import CameraApp from "../Camera";
+import Colors from "../../utils/Colors";
 import Login from "../Login";
 import ProductDetails from "../ProductDetails";
 import ProductList from "../ProductList";
@@ -7,7 +8,6 @@ import React from "react";
 import { SplashScreen } from "../SplashScreen";
 import UserProfile from "../UserProfile";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Colors from "../../utils/Colors";
 
 const Stack = createNativeStackNavigator();
 const headerOptions = {
@@ -21,7 +21,7 @@ const headerOptions = {
 const MainStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={headerOptions}>
-      <Stack.Screen name="Home" component={ProductList} />
+      <Stack.Screen name="Home1" component={ProductList} />
       <Stack.Screen name="Product Details" component={ProductDetails} />
     </Stack.Navigator>
   );

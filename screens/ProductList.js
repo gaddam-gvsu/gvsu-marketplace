@@ -1,3 +1,5 @@
+import * as Location from "expo-location";
+
 import {
   FlatList,
   SafeAreaView,
@@ -17,13 +19,36 @@ import { Feather } from "@expo/vector-icons";
 const ProductList = ({ route, navigation }) => {
   const loading = false;
   const [listings, setListings] = useState([]);
+  const [location, setLocation] = useState();
+
+  const getLocation = async () => {
+    try {
+      const { granted } = await Location.requestForegroundPermissionsAsync();
+      if (!granted) return;
+      const {
+        coords: { latitude, longitude },
+      } = await Location.getCurrentPositionAsync();
+      setLocation({ latitude, longitude });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+      getLocation();
+  }, []);
 
 
   const fetchProducts = () => {
-    getProducts().then((products) => setListings(products));
+    console.log('fetch ', location);
+    getProducts(location).then((products) => setListings(products));
   }
 
-  useEffect(fetchProducts, []);
+  useEffect(() => {
+    if(location) {
+      fetchProducts();
+    }
+  }, [location]);
 
   useEffect(() => {
     if(route.params?.refresh) {

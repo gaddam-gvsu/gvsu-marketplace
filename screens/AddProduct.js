@@ -12,10 +12,9 @@ import {
 } from "react-native";
 
 import { AuthContext } from "../App";
+import Button from "../components/Button";
 import CategoryPickerItem from "../components/CategoryPickerItem";
 import Colors from "../utils/Colors";
-import Button from "../components/Button";
-import Picker from "../components/forms/FormPicker";
 import FormField from "../components/forms/FormField";
 import ImageInputList from "../components/ImageInputList";
 import Picker from "../components/forms/FormPicker";
@@ -89,7 +88,7 @@ const AddProduct = ({ route, navigation }) => {
   const [uploaded, setUploaded] = useState([]);
   const [progress, setProgress] = useState(0);
 
-    const getLocation = async () => {
+  const getLocation = async () => {
     try {
       const { granted } = await Location.requestForegroundPermissionsAsync();
       if (!granted) return;
@@ -100,13 +99,15 @@ const AddProduct = ({ route, navigation }) => {
         latitude,
         longitude,
       });
-      setLocation({latitude, longitude, address: reverseGeo});
+      setLocation({ latitude, longitude, address: reverseGeo });
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(() => {getLocation()}, []);
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   useEffect(() => {
     if (route.params?.imageRes) {
@@ -146,8 +147,8 @@ const AddProduct = ({ route, navigation }) => {
   };
 
   const handleSubmit = async (listing, { resetForm }) => {
-    const {address, ...loc} = location;
-    const data = { 
+    const { address, ...loc } = location;
+    const data = {
       title: listing.title,
       price: listing.price,
       category: listing.category.label,
@@ -155,11 +156,11 @@ const AddProduct = ({ route, navigation }) => {
       images: listing.images,
       location: loc,
       address,
-      email: user.email
+      email: user.email,
     };
     await saveProduct(data);
     resetForm();
-    navigation.navigate('Home', {refresh: true});
+    navigation.navigate("Home", { refresh: true });
   };
 
   return (

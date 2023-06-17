@@ -10,6 +10,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 
+import { computeDistance } from "../utils/distanceUtil";
 import { getBlob } from "../utils/blobUtil";
 import { initializeApp } from "firebase/app";
 import { randomUUID } from "expo-crypto";
@@ -58,7 +59,7 @@ export const removeProduct = async (product) => {
   return await remove(dref(db, prodLocation));
 }
 
-export const getProducts = async () => {
+export const getProducts = async (location) => {
   try {
     const dbRef = dref(getDatabase());
     const snapshot = await get(child(dbRef, `products/`));
