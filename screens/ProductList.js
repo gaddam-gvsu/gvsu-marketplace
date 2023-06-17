@@ -53,7 +53,7 @@ const ProductList = ({ route, navigation }) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      if(route.params?.refresh) {
+      if(location) {
         fetchProducts();
       }
     });
