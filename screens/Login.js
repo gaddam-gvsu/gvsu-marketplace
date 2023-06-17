@@ -18,8 +18,8 @@ export default function Login() {
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: "749426793103-at37tgncj3o3phvd3biqa2kfuve7tklp.apps.googleusercontent.com",
     iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-    webClientId: "749426793103-rvn4d39nqgifqs1jgmv1mpb7kaq8fvpq.apps.googleusercontent.com"
-
+    webClientId: "749426793103-rvn4d39nqgifqs1jgmv1mpb7kaq8fvpq.apps.googleusercontent.com",
+    expoClientId: "749426793103-rvn4d39nqgifqs1jgmv1mpb7kaq8fvpq.apps.googleusercontent.com",
   });
 
   useEffect(() => {
