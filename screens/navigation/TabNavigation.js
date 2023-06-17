@@ -1,14 +1,16 @@
-import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { DefaultTheme } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   MainStackNavigator,
   ProductStackNavigator,
   ProfileStackNavigator,
 } from "./StackNavigation";
+import React, { useContext } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+
+import { AuthContext } from "../../App";
+import { DefaultTheme } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../utils/Colors";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +25,7 @@ const CustomButton = ({ children, onPress }) => {
 };
 
 const BottomTabNavigator = () => {
+  const { user, signOut } = useContext(AuthContext);
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen
@@ -45,7 +48,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Profile Nav"
+        name={user.given_name}
         component={ProfileStackNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (

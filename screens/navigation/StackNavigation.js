@@ -1,12 +1,12 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "../Login";
-import { SplashScreen } from "../SplashScreen";
-import ProductList from "../ProductList";
-import ProductDetails from "../ProductDetails";
-import CameraApp from "../Camera";
 import AddProduct from "../AddProduct";
+import CameraApp from "../Camera";
+import Login from "../Login";
+import ProductDetails from "../ProductDetails";
+import ProductList from "../ProductList";
+import React from "react";
+import { SplashScreen } from "../SplashScreen";
 import UserProfile from "../UserProfile";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
 
@@ -64,7 +64,7 @@ const ProfileStackNavigator = () => {
 const SignInStackNavigator = (options) => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="SignIn" component={Login} options={options} />
+      <Stack.Screen name="GVSU Marketplace" component={Login} options={options} />
     </Stack.Navigator>
   );
 };

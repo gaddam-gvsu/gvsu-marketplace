@@ -51,7 +51,7 @@ export default function Login() {
     <View style={styles.container}>
       {userInfo === null ? (
         <Button
-          title="Sign in with Google"
+          title="Sign in with GVSU Account( Google )"
           disabled={!request}
           onPress={() => {
             promptAsync();

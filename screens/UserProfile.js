@@ -1,9 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { AuthContext } from '../App';
+import { Button } from 'react-native-elements';
+import { useContext } from 'react';
+
 const UserProfile = () => {
+  const { user, signOut } = useContext(AuthContext);
+
   return (
     <View style={styles.container}>
-      <Text>{"This is user profile screen"}</Text>
+      <Button title="Sign out" onPress={signOut} />
     </View>
   );
 }
