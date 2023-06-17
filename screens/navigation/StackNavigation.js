@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 
 import AddProduct from "../AddProduct";
 import { AuthContext } from "../../utils/Context";
-import CameraApp from "../Camera";
 import Colors from "../../utils/Colors";
 import Login from "../Login";
 import ProductDetails from "../ProductDetails";
@@ -33,7 +32,6 @@ const ProductStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={headerOptions}>
       <Stack.Screen name="Add Product" component={AddProduct} />
-      <Stack.Screen name="Camera" component={CameraApp} />
     </Stack.Navigator>
   );
 };
