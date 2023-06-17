@@ -32,6 +32,7 @@ const BottomTabNavigator = () => {
         name="Home"
         component={MainStackNavigator}
         options={{
+          tabBarShowLabel: false,
           tabBarIcon: ({ color, size }) => (
             <Feather name="home" color={color} size={size} />
           ),
@@ -41,6 +42,7 @@ const BottomTabNavigator = () => {
         name="Product Nav"
         component={ProductStackNavigator}
         options={{
+          tabBarShowLabel: false,
           tabBarIcon: ({ color, size }) => (
             <Feather name="plus-circle" color={color} size={size} />
           ),
@@ -51,6 +53,7 @@ const BottomTabNavigator = () => {
         name={user.given_name}
         component={ProfileStackNavigator}
         options={{
+          tabBarShowLabel: false,
           tabBarIcon: ({ color, size }) => (
             <Feather name="user" color={color} size={size} />
           ),
