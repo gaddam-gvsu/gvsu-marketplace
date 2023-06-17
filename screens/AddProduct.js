@@ -21,6 +21,7 @@ import Picker from "../components/forms/FormPicker";
 import UploadScreen from "./UploadScreen";
 import defaultStyles from "../utils/DefaultStyles";
 import { saveProduct } from "../shared/firebaseApi";
+import CameraApp from "./Camera";
 
 const categories = [
   {
@@ -85,6 +86,7 @@ const AddProduct = ({ route, navigation }) => {
   const { user } = useContext(AuthContext);
   const [location, setLocation] = useState();
   const [uploadVisible, setUploadVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [uploaded, setUploaded] = useState([]);
   const [progress, setProgress] = useState(0);
 
@@ -164,6 +166,15 @@ const AddProduct = ({ route, navigation }) => {
     navigation.navigate("Products", { refresh: true });
   };
 
+  const handleAdd = (uri) => {
+    setModalVisible(false);
+    setUploaded([...uploaded, uri]);
+  };
+
+  const handleClose = () => {
+    setModalVisible(false);
+  };
+
   return (
     <SafeAreaView style={styles.screen}>
       <ScrollView style={styles.view}>
@@ -213,8 +224,16 @@ const AddProduct = ({ route, navigation }) => {
               <Button
                 style={styles.text}
                 title="Add Image(s)"
-                onPress={() => navigation.navigate("Camera")}
+                onPress={() => {
+                  setModalVisible(true);
+                }}
               />
+
+              <CameraApp
+                visible={modalVisible}
+                onAddImage={handleAdd}
+                close={handleClose}
+              ></CameraApp>
 
               {uploaded && (
                 <FormImagePicker name="images" imageUris={uploaded} />
