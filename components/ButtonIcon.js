@@ -1,5 +1,7 @@
 import * as React from "react";
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+
 import Icon from "./Icon";
 
 export default function ButtonIcon({
@@ -9,15 +11,17 @@ export default function ButtonIcon({
   icon,
   type = "materialCommunity",
   color,
+  backgroundColor
 }) {
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
+    <TouchableOpacity onPress={onPress} style={[styles.button]}>
       {icon && (
         <Icon
           name={icon}
           size={50}
           color={color ? color : "#f1f1f1"}
           type={type}
+          backgroundColor= {backgroundColor}
         ></Icon>
       )}
       <Text style={styles.text}>{title}</Text>
