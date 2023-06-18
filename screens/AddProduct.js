@@ -13,16 +13,16 @@ import {
 
 import { AuthContext } from "../utils/Context";
 import Button from "../components/Button";
+import CameraApp from "./Camera";
 import CategoryPickerItem from "../components/CategoryPickerItem";
 import Colors from "../utils/Colors";
 import FormField from "../components/forms/FormField";
 import ImageInputList from "../components/ImageInputList";
 import Picker from "../components/forms/FormPicker";
+import SubmitButton from "../components/forms/SubmitButton";
 import UploadScreen from "./UploadScreen";
 import defaultStyles from "../utils/DefaultStyles";
 import { saveProduct } from "../shared/firebaseApi";
-import CameraApp from "./Camera";
-import SubmitButton from "../components/forms/SubmitButton";
 
 const categories = [
   {
@@ -97,14 +97,13 @@ const AddProduct = ({ route, navigation }) => {
   const [uploadVisible, setUploadVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [progress, setProgress] = useState(0);
-
+  
   const getLocation = async () => {
     try {
-      const { granted } = await Location.requestForegroundPermissionsAsync();
-      if (!granted) return;
       const {
         coords: { latitude, longitude },
       } = await Location.getCurrentPositionAsync();
+      console.log('latitude', latitude);
       const reverseGeo = await Location.reverseGeocodeAsync({
         latitude,
         longitude,

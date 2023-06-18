@@ -4,11 +4,11 @@ import * as MediaLibrary from "expo-media-library";
 import { Camera, CameraType } from "expo-camera";
 import {
   Image,
+  Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Modal,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -36,49 +36,46 @@ const CameraApp = ({ visible, onAddImage, close }) => {
       setLibraryPermission(libraryStatus.granted);
     })();
   }, []);
-
+  
   const takePicture = async () => {
     if (cameraRef) {
       try {
         const data = await cameraRef.current.takePictureAsync();
         setImage(data.uri);
+        onAddImage(data.uri);
       } catch (error) {
         console.log(error);
       }
     }
   };
 
-  const savePicture = async () => {
-    if (image) {
-      try {
-        const asset = await MediaLibrary.createAssetAsync(image);
-        setImage(null);
-        onAddImage(image);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  // const savePicture = async () => {
+  //   if (image) {
+  //     try {
+  //       const asset = await MediaLibrary.createAssetAsync(image);
+  //       setImage(null);
+  //       onAddImage(image);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
   const switchCamera = () => {
     setType(type === CameraType.back ? CameraType.front : CameraType.back);
   };
 
   const photoLibrary = async () => {
-    if (!hasLibraryPermission) {
-      alert("You need to enable permission to access the library");
-    } else {
-      try {
-        const result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          quality: 0.5,
-        });
-        if (!result.canceled) {
-          onAddImage(result.assets[0]["uri"]);
-        }
-      } catch (e) {
-        console.log(e);
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 0.5,
+      });
+      if (!result.canceled) {
+        onAddImage(result.assets[0]["uri"]);
       }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -87,7 +84,7 @@ const CameraApp = ({ visible, onAddImage, close }) => {
   // }
 
   return (
-    hasCameraPermission && (
+    (
       <Modal visible={visible} animationType="slide">
         <View style={styles.container}>
           {!image ? (
@@ -157,7 +154,7 @@ const CameraApp = ({ visible, onAddImage, close }) => {
                   icon="retweet"
                   type="antDesign"
                 />
-                <ButtonIcon title="Save" onPress={savePicture} icon="check" />
+                {/* <ButtonIcon title="Save" onPress={savePicture} icon="check" /> */}
               </View>
             ) : (
               <View
