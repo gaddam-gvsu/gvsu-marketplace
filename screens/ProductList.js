@@ -21,9 +21,13 @@ import { useIsFocused } from "@react-navigation/native";
 
 const ProductList = ({ route, navigation }) => {
   const loading = false;
+  const [allListings, setAllListings] = useState([]);
   const [listings, setListings] = useState([]);
   const [location, setLocation] = useState();
   const isFocused = useIsFocused();
+
+  console.log('allListings', allListings.map(v =>  v.title));
+
 
   const getLocation = async () => {
     try {
@@ -50,24 +54,30 @@ const ProductList = ({ route, navigation }) => {
         },
       },
     });
-  }, [navigation]);
+  });
 
   useEffect(() => {
     getLocation();
   }, []);
 
   const fetchProducts = () => {
-    getProducts(location).then((products) => setListings(products));
+    getProducts(location).then((products) => {
+      setAllListings(products);
+      setListings(products);
+    });
   };
 
   const handleFilter = (searchTxt) => {
     if (searchTxt) {
-      const filteredList = listings.filter((listing) => {
+      console.log('searchTxt', searchTxt);
+      console.log('allListings', allListings.map(v =>  v.title));
+      const filteredList = allListings.filter((listing) => {
         return listing.title.toUpperCase().includes(searchTxt.toUpperCase());
       });
+      console.log("filteredList", filteredList.length);
       setListings(filteredList);
     } else {
-      setListings(listings);
+      setListings(allListings);
     }
   };
 
@@ -102,20 +112,6 @@ const ProductList = ({ route, navigation }) => {
 
       <SafeAreaView style={styles.screen}>
         <View style={styles.view}>
-          {/* {error && (
-            <>
-              <Text style={defaultStyles.text}>
-                {"Couldn't retieve the listings"}
-              </Text>
-
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: colors[color] }]}
-                onPress={loadListings}
-              >
-                <Text style={styles.retryText}>{"Retry"}</Text>
-              </TouchableOpacity>
-            </>
-          )} */}
           <FlatList
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}

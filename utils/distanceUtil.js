@@ -21,7 +21,6 @@ export function computeDistance(location1, location2) {
   var d = R * c;
 
   d = toMiles(d);
-  console.log("d", d);
 
   return round(d, 3);
 }

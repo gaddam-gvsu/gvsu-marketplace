@@ -52,7 +52,6 @@ const CameraApp = ({ visible, onAddImage, close }) => {
     if (image) {
       try {
         const asset = await MediaLibrary.createAssetAsync(image);
-        alert("Picture saved! 🎉");
         setImage(null);
         onAddImage(image);
       } catch (error) {
