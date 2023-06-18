@@ -1,3 +1,6 @@
+import * as Location from "expo-location";
+
+import { AuthContext, LocationContext } from "../../utils/Context";
 import {
   MainStackNavigator,
   ProductStackNavigator,
@@ -6,11 +9,12 @@ import {
 import React, { useContext } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { AuthContext } from "../../utils/Context";
 import { DefaultTheme } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../utils/Colors";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,7 +29,27 @@ const CustomButton = ({ children, onPress }) => {
 };
 
 const BottomTabNavigator = () => {
+  const [location, setLocation] = useState();
+
+  const getLocation = async () => {
+    try {
+      const { granted } = await Location.requestForegroundPermissionsAsync();
+      if (!granted) return;
+      const {
+        coords: { latitude, longitude },
+      } = await Location.getCurrentPositionAsync();
+      setLocation({ latitude, longitude });
+    } catch (e) {
+      console.log("Location Error", e);
+    }
+  };
+
+  useEffect(() => {
+    getLocation();
+  }, []);
+
   return (
+    <LocationContext.Provider value={{location}}>
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen
         name="Home"
@@ -59,6 +83,7 @@ const BottomTabNavigator = () => {
         }}
       />
     </Tab.Navigator>
+    </LocationContext.Provider>
   );
 };
 

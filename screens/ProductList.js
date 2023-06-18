@@ -13,34 +13,37 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import Colors from "../utils/Colors";
 import { Feather } from "@expo/vector-icons";
 import { Image } from "react-native-elements";
+import { LocationContext } from "../utils/Context";
 import LottieView from "lottie-react-native";
 import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
 import { getProducts } from "../shared/firebaseApi";
+import { useContext } from "react";
 import { useIsFocused } from "@react-navigation/native";
 
 const ProductList = ({ route, navigation }) => {
   const loading = false;
   const [allListings, setAllListings] = useState([]);
   const [listings, setListings] = useState([]);
-  const [location, setLocation] = useState();
+  // const [location, setLocation] = useState();
   const isFocused = useIsFocused();
 
-  console.log('allListings', allListings.map(v =>  v.title));
+  const { location } = useContext(LocationContext);
+  // console.log('allListings', allListings.map(v =>  v.title));
 
 
-  const getLocation = async () => {
-    try {
-      const { granted } = await Location.requestForegroundPermissionsAsync();
-      if (!granted) return;
-      const {
-        coords: { latitude, longitude },
-      } = await Location.getCurrentPositionAsync();
-      setLocation({ latitude, longitude });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const getLocation = async () => {
+  //   try {
+  //     const { granted } = await Location.requestForegroundPermissionsAsync();
+  //     if (!granted) return;
+  //     const {
+  //       coords: { latitude, longitude },
+  //     } = await Location.getCurrentPositionAsync();
+  //     setLocation({ latitude, longitude });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -56,9 +59,9 @@ const ProductList = ({ route, navigation }) => {
     });
   });
 
-  useEffect(() => {
-    getLocation();
-  }, []);
+  // useEffect(() => {
+  //   getLocation();
+  // }, []);
 
   const fetchProducts = () => {
     getProducts(location).then((products) => {

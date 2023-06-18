@@ -1,5 +1,6 @@
 import * as Location from "expo-location";
 
+import { AuthContext, LocationContext } from "../utils/Context";
 import { Formik, useFormikContext } from "formik";
 import React, { useContext, useEffect, useState } from "react";
 import {
@@ -11,7 +12,6 @@ import {
   View,
 } from "react-native";
 
-import { AuthContext } from "../utils/Context";
 import Button from "../components/Button";
 import CameraApp from "./Camera";
 import CategoryPickerItem from "../components/CategoryPickerItem";
@@ -97,17 +97,19 @@ const AddProduct = ({ route, navigation }) => {
   const [uploadVisible, setUploadVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [progress, setProgress] = useState(0);
+  const { location: currLoc } = useContext(LocationContext);
+
   
   const getLocation = async () => {
     try {
-      const {
-        coords: { latitude, longitude },
-      } = await Location.getCurrentPositionAsync();
-      console.log('latitude', latitude);
-      const reverseGeo = await Location.reverseGeocodeAsync({
-        latitude,
-        longitude,
-      });
+      // const {
+      //   coords: { latitude, longitude },
+      // } = await Location.getCurrentPositionAsync();
+      // console.log('latitude', latitude);
+      const {latitude, longitude} = currLoc;
+      console.log('currLoc', currLoc);
+      const reverseGeo = await Location.reverseGeocodeAsync(currLoc);
+      console.log(reverseGeo);
       setLocation({ latitude, longitude, address: reverseGeo });
     } catch (e) {
       console.log(e);
