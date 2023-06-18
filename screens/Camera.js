@@ -83,126 +83,130 @@ const CameraApp = ({ visible, onAddImage, close }) => {
     }
   };
 
-  if (!hasCameraPermission) {
-    return <Text>No access to camera</Text>;
-  }
+  // if (!hasCameraPermission) {
+  //   return <Text>No access to camera</Text>;
+  // }
 
   return (
-    <Modal visible={visible} animationType="slide">
-      <View style={styles.container}>
-        {!image ? (
-          <Camera
-            style={styles.camera}
-            type={type}
-            ref={cameraRef}
-            flashMode={flash}
-          >
-            <ButtonIcon
-              style={{ justifyContent: "flex-end" }}
-              onPress={close}
-              icon="close"
-            />
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                paddingHorizontal: 30,
-              }}
+    hasCameraPermission && (
+      <Modal visible={visible} animationType="slide">
+        <View style={styles.container}>
+          {!image ? (
+            <Camera
+              style={styles.camera}
+              type={type}
+              ref={cameraRef}
+              flashMode={flash}
             >
               <ButtonIcon
-                title=""
-                icon={
-                  !(type === CameraType.front) ? "camera-front" : "camera-rear"
-                }
-                onPress={switchCamera}
+                style={{ justifyContent: "flex-end" }}
+                onPress={close}
+                icon="close"
               />
-              <ButtonIcon
-                onPress={() =>
-                  setFlash(
-                    flash === Camera.Constants.FlashMode.off
-                      ? Camera.Constants.FlashMode.on
-                      : Camera.Constants.FlashMode.off
-                  )
-                }
-                icon={
-                  !(flash === Camera.Constants.FlashMode.on)
-                    ? "flash-on"
-                    : "flash-off"
-                }
-                color={
-                  flash === Camera.Constants.FlashMode.off ? "gray" : "#fff"
-                }
-                type="material"
-              />
-            </View>
-          </Camera>
-        ) : (
-          <Image source={{ uri: image }} style={styles.camera} />
-        )}
-
-        <View style={styles.controls}>
-          {image ? (
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                paddingHorizontal: 50,
-              }}
-            >
-              <ButtonIcon
-                title="Re-take"
-                onPress={() => setImage(null)}
-                icon="retweet"
-                type="antDesign"
-              />
-              <ButtonIcon title="Save" onPress={savePicture} icon="check" />
-            </View>
-          ) : (
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-start",
-              }}
-            >
               <View
                 style={{
-                  width: width / 2 - 45,
-                  height: 70,
-                  borderWidth: 2,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingHorizontal: 30,
                 }}
               >
                 <ButtonIcon
-                  style={{
-                    marginVertical: 15,
-                  }}
-                  onPress={photoLibrary}
-                  icon="photo-library"
+                  title=""
+                  icon={
+                    !(type === CameraType.front)
+                      ? "camera-front"
+                      : "camera-rear"
+                  }
+                  onPress={switchCamera}
+                />
+                <ButtonIcon
+                  onPress={() =>
+                    setFlash(
+                      flash === Camera.Constants.FlashMode.off
+                        ? Camera.Constants.FlashMode.on
+                        : Camera.Constants.FlashMode.off
+                    )
+                  }
+                  icon={
+                    !(flash === Camera.Constants.FlashMode.on)
+                      ? "flash-on"
+                      : "flash-off"
+                  }
+                  color={
+                    flash === Camera.Constants.FlashMode.off ? "gray" : "#fff"
+                  }
                   type="material"
                 />
               </View>
+            </Camera>
+          ) : (
+            <Image source={{ uri: image }} style={styles.camera} />
+          )}
+
+          <View style={styles.controls}>
+            {image ? (
               <View
                 style={{
-                  flex: 1,
-                  justifyContent: "flex-start",
-                  borderWidth: 2,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingHorizontal: 50,
                 }}
               >
-                <TouchableOpacity
-                  onPress={takePicture}
-                  style={{
-                    width: 70,
-                    height: 70,
-                    bottom: 0,
-                    borderRadius: 50,
-                    backgroundColor: "#fff",
-                  }}
+                <ButtonIcon
+                  title="Re-take"
+                  onPress={() => setImage(null)}
+                  icon="retweet"
+                  type="antDesign"
                 />
+                <ButtonIcon title="Save" onPress={savePicture} icon="check" />
               </View>
-            </View>
-          )}
+            ) : (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <View
+                  style={{
+                    width: width / 2 - 45,
+                    height: 70,
+                    borderWidth: 2,
+                  }}
+                >
+                  <ButtonIcon
+                    style={{
+                      marginVertical: 15,
+                    }}
+                    onPress={photoLibrary}
+                    icon="photo-library"
+                    type="material"
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "flex-start",
+                    borderWidth: 2,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={takePicture}
+                    style={{
+                      width: 70,
+                      height: 70,
+                      bottom: 0,
+                      borderRadius: 50,
+                      backgroundColor: "#fff",
+                    }}
+                  />
+                </View>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    )
   );
 };
 

@@ -22,6 +22,7 @@ import UploadScreen from "./UploadScreen";
 import defaultStyles from "../utils/DefaultStyles";
 import { saveProduct } from "../shared/firebaseApi";
 import CameraApp from "./Camera";
+import SubmitButton from "../components/forms/SubmitButton";
 
 const categories = [
   {
@@ -80,6 +81,14 @@ const categories = [
   },
 ];
 
+const initialValues = {
+  title: "",
+  price: "",
+  description: "",
+  category: null,
+  images: [],
+};
+
 // Form image picker field value should be set to formik field value in useEffect
 
 const AddProduct = ({ route, navigation }) => {
@@ -87,7 +96,6 @@ const AddProduct = ({ route, navigation }) => {
   const [location, setLocation] = useState();
   const [uploadVisible, setUploadVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [uploaded, setUploaded] = useState([]);
   const [progress, setProgress] = useState(0);
 
   const getLocation = async () => {
@@ -111,40 +119,45 @@ const AddProduct = ({ route, navigation }) => {
     getLocation();
   }, []);
 
-  useEffect(() => {
-    if (route.params?.imageRes) {
-      setUploaded([...uploaded, route.params?.imageRes]);
-    }
-  }, [route.params?.imageRes]);
+  const FormImagePicker = ({ name }) => {
+    const { values, setFieldValue } = useFormikContext();
+    const imageUris = values[name];
 
-  const FormImagePicker = ({ name, imageUris }) => {
-    const { setFieldValue } = useFormikContext();
-    const [iUris, setIUris] = useState(imageUris);
     const handleRemove = (uri) => {
-      const filteredUris = iUris.filter((imageUri) => imageUri !== uri);
-      setFieldValue(name, filteredUris);
-      setIUris(filteredUris);
+      setFieldValue(
+        name,
+        imageUris.filter((imageUri) => imageUri !== uri)
+      );
+    };
+
+    const handleAdd = (uri) => {
+      setModalVisible(false);
+      setFieldValue("images", [...imageUris, uri]);
+    };
+
+    const handleClose = () => {
+      setModalVisible(false);
     };
 
     return (
       <>
-        <ImageInputList imageUris={iUris} onRemoveImage={handleRemove} />
-      </>
-    );
-  };
+        <View style={styles.view}>
+          <Button
+            style={styles.text}
+            title="Add Image(s)"
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          />
 
-  const SubmitButton = ({ title }) => {
-    const { setFieldValue, handleSubmit } = useFormikContext();
-    useEffect(() => {
-      setFieldValue("images", uploaded);
-    }, [uploaded]);
-    return (
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: Colors.primary }]}
-        onPress={handleSubmit}
-      >
-        <Text style={styles.text}>{title}</Text>
-      </TouchableOpacity>
+          <CameraApp
+            visible={modalVisible}
+            onAddImage={handleAdd}
+            close={handleClose}
+          ></CameraApp>
+          <ImageInputList imageUris={imageUris} onRemoveImage={handleRemove} />
+        </View>
+      </>
     );
   };
 
@@ -161,18 +174,8 @@ const AddProduct = ({ route, navigation }) => {
       email: user.email,
     };
     await saveProduct(data);
-    setUploaded([]);
     resetForm();
     navigation.navigate("Products", { refresh: true });
-  };
-
-  const handleAdd = (uri) => {
-    setModalVisible(false);
-    setUploaded([...uploaded, uri]);
-  };
-
-  const handleClose = () => {
-    setModalVisible(false);
   };
 
   return (
@@ -183,16 +186,7 @@ const AddProduct = ({ route, navigation }) => {
           progress={progress}
           visible={uploadVisible}
         />
-        <Formik
-          initialValues={{
-            title: "",
-            price: "",
-            description: "",
-            category: null,
-            images: [],
-          }}
-          onSubmit={handleSubmit}
-        >
+        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
           {() => (
             <>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -221,24 +215,8 @@ const AddProduct = ({ route, navigation }) => {
                 label="Description"
               />
 
-              <Button
-                style={styles.text}
-                title="Add Image(s)"
-                onPress={() => {
-                  setModalVisible(true);
-                }}
-              />
-
-              <CameraApp
-                visible={modalVisible}
-                onAddImage={handleAdd}
-                close={handleClose}
-              ></CameraApp>
-
-              {uploaded && (
-                <FormImagePicker name="images" imageUris={uploaded} />
-              )}
-              <SubmitButton title="Save" />
+              <FormImagePicker name="images" />
+              <SubmitButton title="Save" style={styles.button} />
             </>
           )}
         </Formik>

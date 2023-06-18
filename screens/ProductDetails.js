@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
 } from "react-native";
 import React, { useCallback, useContext, useEffect } from "react";
 
@@ -16,6 +17,9 @@ import colors from "../utils/Colors";
 import defaultStyles from "../utils/DefaultStyles";
 import { removeProduct } from "../shared/firebaseApi";
 import { useFocusEffect } from "@react-navigation/native";
+
+export const SLIDER_WIDTH = Dimensions.get("window").width + 80;
+export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
 
 // import ContactSellerForm from "../components/ContactSellerForm";
 

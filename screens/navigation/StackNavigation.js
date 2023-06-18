@@ -48,8 +48,12 @@ const ProfileStackNavigator = () => {
 
 const SignInStackNavigator = (options) => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="GVSU Marketplace" component={Login} options={options} />
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="GVSU Marketplace"
+        component={Login}
+        options={options}
+      />
     </Stack.Navigator>
   );
 };

@@ -61,9 +61,14 @@ const ProductList = ({ route, navigation }) => {
   };
 
   const handleFilter = (searchTxt) => {
-    return listings.filter((listing) => {
-      return listing.title.toUpperCase() === searchTxt.toUpperCase();
-    });
+    if (searchTxt) {
+      const filteredList = listings.filter((listing) => {
+        return listing.title.toUpperCase().includes(searchTxt.toUpperCase());
+      });
+      setListings(filteredList);
+    } else {
+      setListings(listings);
+    }
   };
 
   useEffect(() => {
