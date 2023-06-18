@@ -75,6 +75,9 @@ const ProductDetails = ({ route, navigation }) => {
           <Text
             style={[defaultStyles.text, styles.normalText]}
           >{`Listed in ${listing.address[0].city},${listing.address[0].region}`}</Text>
+          <Text
+            style={[defaultStyles.text, styles.normalText]}
+          >{`Contact: ${listing.email}`}</Text>
 
           {/* <ContactSellerForm listing={listing} /> */}
         </View>
@@ -112,7 +115,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 300,
+    height: 250,
   },
   price: {
     color: colors.black,
